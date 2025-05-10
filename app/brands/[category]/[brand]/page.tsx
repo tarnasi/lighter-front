@@ -10,13 +10,16 @@ type Props = {
   };
 };
 
-export default async function Page({ params }: Props) {
+export default async function ProductPage({ params }: Props) {
+
+  const paramsObject = await params
+
   return (
     <div>
       <Navbar />
       <PageTitle
-        title={`محصولات برند ${params.brand}`}
-        returnLink={`/brands/${params.category}`}
+        title={`محصولات برند ${paramsObject.brand}`}
+        returnLink={`/brands/${paramsObject.category}`}
       />
       <Products data={[]} />
     </div>

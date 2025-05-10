@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Categories from "@/components/Categories";
 import PageTitle from "@/components/PageTitle";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <Navbar />

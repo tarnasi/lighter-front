@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import Brands from '@/components/Brands'
+import Brands from "@/components/Brands";
 import PageTitle from "@/components/PageTitle";
 
 type Props = {
@@ -8,12 +8,14 @@ type Props = {
   };
 };
 
-const BrandPage = ({ params }: Props) => {
+const BrandPage = async ({ params }: Props) => {
+  const paramsObject = await params;
+
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <Navbar />
-      <PageTitle title={`برندهای ${params.category}`} returnLink="/" />
-      <Brands category={params.category} />
+      <PageTitle title={`برندهای ${paramsObject.category}`} returnLink="/" />
+      <Brands category={paramsObject.category} />
     </div>
   );
 };
