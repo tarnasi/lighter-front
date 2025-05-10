@@ -1,11 +1,14 @@
 import Navbar from "@/components/Navbar";
-import Link from "next/link";
+
+import Categories from "@/components/Categories";
+import PageTitle from "@/components/PageTitle";
 
 export default function Home() {
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <Navbar />
-      
+      <PageTitle title="دسته بندی محصولات" />
+      <Categories />
     </div>
   );
 }

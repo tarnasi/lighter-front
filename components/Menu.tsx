@@ -19,7 +19,7 @@ const Menu = (props: Props) => {
       {open && (
         <div className="absolute bg-white text-black left-0 top-15 w-full h-[calc(100vh-60px)] gap-8 text-xl text-center lg:pr-32">
           <div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-8 text-sm gap-2 pt-2"
+          className="grid grid-cols-2 text-lg gap-2 pt-2"
           >
             <Link href="/salt">
               <div className="text-sky-600 hover:text-teal-600 hover:shadow">سالت و جویس</div>
