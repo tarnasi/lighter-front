@@ -17,7 +17,7 @@ export default async function LoginPage({}: Props) {
         </Link>
         <div className="flex flex-col mt-6 mb-4">
           <label htmlFor="mobile" className="mb-2">
-            شماره موبایل
+            موبایل
           </label>
           <input
             className="border border-gray-500 p-2 rounded"
