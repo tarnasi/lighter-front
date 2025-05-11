@@ -10,12 +10,12 @@ const PageTitle = ({ title, returnLink }: Props) => {
     <div className="flex items-center justify-between px-4 py-2 bg-gray-200">
       {returnLink && (
         <Link href={returnLink}>
-          <div className="text-sky-600 underline underline-offset-3">
+          <div className="text-sm text-sky-600">
             برگشت به صفحه قبل &larr;
           </div>
         </Link>
       )}
-      <div className="text-teal-700">{title}</div>
+      <div className="text-teal-700 text-sm">{title}</div>
     </div>
   );
 };

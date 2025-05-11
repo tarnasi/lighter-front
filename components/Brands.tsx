@@ -32,7 +32,7 @@ const Brands = ({category}: BrandsProps) => {
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 bg-white h-min-screen">
       {brands.map((brand) => (
         <Link key={brand.id} href={`/brands/${category}/${brand.slug}`}>
-          <div className="w-full aspect-square bg-white rounded-xl shadow-md border-2 border-blue-900 hover:border-teal-600 transition-all duration-300 flex flex-col items-center justify-center gap-2 p-4">
+          <div className="w-full aspect-square bg-white rounded-xl shadow-md border-2 border-blue-100 hover:border-teal-300 transition-all duration-300 flex flex-col items-center justify-center gap-2 p-4">
             <div className="w-16 h-16 relative">
               <Image
                 src={brand.image}
