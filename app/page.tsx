@@ -5,7 +5,7 @@ import PageTitle from "@/components/PageTitle";
 
 export default async function Home() {
   return (
-    <div className="font-[family-name:var(--font-geist-sans)]">
+    <div className="bg-white">
       <Navbar />
       <PageTitle title="دسته بندی محصولات" />
       <Categories />

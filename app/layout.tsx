@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import dayjs from 'dayjs'
+import jalali from 'dayjs-jalali'
 import "./globals.css";
+
+dayjs.extend(jalali)
 
 export const metadata: Metadata = {
   title: "پخش سوسنی",

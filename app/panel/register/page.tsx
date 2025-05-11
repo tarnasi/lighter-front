@@ -13,7 +13,7 @@ export default async function LoginPage({}: Props) {
         className="h-full w-100 md:w-1/2 lg:w-1/3 mt-8 p-4 rounded shadow-xl"
       >
         <Link href="/" className="flex justify-center items-center gap-2 border-b border-gray-200 pb-2">
-          <Image src="/logo/logo-3.png" alt="tinyfire" width={72} height={72} />
+          <Image src="/logo/logo-3.png" alt="tinyfire" width={64} height={64} />
         </Link>
         <div className="flex flex-col mt-6 mb-4">
           <label htmlFor="mobile" className="mb-2">
@@ -24,7 +24,7 @@ export default async function LoginPage({}: Props) {
             type="text"
             name="mobile"
             id="mobile"
-            placeholder="0999010101010..."
+            placeholder="09991112233"
             autoComplete="tel"
           />
         </div>

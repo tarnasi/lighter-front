@@ -18,7 +18,7 @@ const categories = [
 
 const Categories = (props: Props) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 bg-white h-min-screen">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4 bg-white min-h-screen">
       {categories.map(({ href, img, label }) => (
         <Link key={href} href={href}>
           <div className="w-full aspect-square bg-white rounded-xl shadow-md border-2 border-blue-900 hover:border-teal-600 transition-all duration-300 flex flex-col items-center justify-center gap-2 p-4">
