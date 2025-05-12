@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 
 import Categories from "@/components/Categories";
 import PageTitle from "@/components/PageTitle";
+import JalaliDate from "@/components/forms/inputs/JalaliCalendarDate";
 
 export default async function Home() {
   return (

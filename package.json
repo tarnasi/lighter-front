@@ -10,15 +10,17 @@
   },
   "dependencies": {
     "dayjs": "^1.11.13",
-    "dayjs-jalali": "^0.0.2",
+    "jalaliday": "^2.3.0",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "react-multi-date-picker": "^4.5.2",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22.15.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
