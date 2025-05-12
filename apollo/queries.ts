@@ -16,13 +16,24 @@ export const LOGIN_MUTATION = gql`
 `;
 
 export const REGISTER_MUTATION = gql`
-  mutation Register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
+  mutation Register(
+    $mobile: String!
+    $email: String
+    $password: String!
+    $birthday: String
+  ) {
+    register(
+      mobile: $mobile
+      email: $email
+      password: $password
+      birthday: $birthday
+    ) {
       token
       user {
         id
-        username
+        mobile
         email
+        birthday
         role
       }
     }
@@ -36,6 +47,19 @@ export const ME_QUERY = gql`
       username
       email
       role
+    }
+  }
+`;
+
+
+export const USER_LIST_QUERY = gql`
+  query UserList {
+    userList {
+      id
+      mobile
+      email
+      role
+      birthday
     }
   }
 `;

@@ -1,25 +1,80 @@
-'use client'
+"use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@apollo/client";
+import { REGISTER_MUTATION } from "@/apollo/queries";
 import JalaliCalendarDate from "./inputs/JalaliCalendarDate";
 import Link from "next/link";
 import Image from "next/image";
 
-type Props = {};
+const RegisterForm = () => {
+  const router = useRouter();
 
-const RegisterForm = (props: Props) => {
-  const [date, setDate] = useState(null);
+  const [form, setForm] = useState({
+    mobile: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [apiError, setApiError] = useState("");
+  const [birthday, setBirthday] = useState<any>(null);
+
+  const [register, { loading }] = useMutation(REGISTER_MUTATION);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormErrors({ ...formErrors, [e.target.name]: "" }); // clear individual error
+  };
 
   const handleDateChange = (newDate: any) => {
-    setDate(newDate);
-    // اگر خواستی به فرم اصلی یا فرم‌هندلر بفرستی اینجا انجام بده
+    setBirthday(newDate);
+  };
+
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    if (!/^09\d{9}$/.test(form.mobile))
+      errors.mobile = "شماره موبایل معتبر نیست";
+    if (!form.password) errors.password = "پسورد را وارد کنید";
+    if (form.password !== form.confirmPassword)
+      errors.confirmPassword = "رمزها یکسان نیستند";
+    return errors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setApiError("");
+    const errors = validate();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    try {
+      const { data } = await register({
+        variables: {
+          mobile: form.mobile,
+          email: form.email || undefined,
+          password: form.password,
+          birthday: birthday ? birthday.toDate().toISOString() : undefined,
+        },
+      });
+
+      if (data?.register?.token) {
+        localStorage.setItem("token", data.register.token);
+        router.push("/panel");
+      }
+    } catch (err: any) {
+      setApiError(err.message || "خطایی رخ داده است");
+    }
   };
 
   return (
     <form
-      action=""
-      method="POST"
-      className="h-full w-100 md:w-2/3 mt-1 p-4 rounded shadow-xl"
+      onSubmit={handleSubmit}
+      className="h-full w-4/5 md:w-4/6 lg:w-5/12 mt-8 p-4 rounded shadow-xl"
     >
       <Link
         href="/"
@@ -27,7 +82,13 @@ const RegisterForm = (props: Props) => {
       >
         <Image src="/logo/logo-3.png" alt="tinyfire" width={64} height={64} />
       </Link>
-      <div className="flex flex-col mt-6 mb-4">
+
+      {apiError && (
+        <p className="text-red-600 text-sm mt-4 text-center">{apiError}</p>
+      )}
+
+      {/* Mobile */}
+      <div className="flex flex-col mt-6 mb-2">
         <label htmlFor="mobile" className="mb-2">
           موبایل
         </label>
@@ -37,23 +98,32 @@ const RegisterForm = (props: Props) => {
           name="mobile"
           id="mobile"
           placeholder="09991112233"
-          autoComplete="tel"
+          value={form.mobile}
+          onChange={handleChange}
         />
+        {formErrors.mobile && (
+          <p className="text-red-500 text-sm mt-1">{formErrors.mobile}</p>
+        )}
       </div>
-      <div className="flex flex-col mb-4">
+
+      {/* Email */}
+      <div className="flex flex-col mb-2">
         <label htmlFor="email" className="mb-2">
-          ایمیل
+          ایمیل (اختیاری)
         </label>
         <input
           className="border border-gray-300 p-2 rounded"
-          type="password"
+          type="email"
           name="email"
           id="email"
           placeholder="example@email.com"
-          autoComplete="email"
+          value={form.email}
+          onChange={handleChange}
         />
       </div>
-      <div className="flex flex-col mb-4">
+
+      {/* Password */}
+      <div className="flex flex-col mb-2">
         <label htmlFor="password" className="mb-2">
           پسورد
         </label>
@@ -63,34 +133,48 @@ const RegisterForm = (props: Props) => {
           name="password"
           id="password"
           placeholder="*******"
-          autoComplete="current-password"
+          value={form.password}
+          onChange={handleChange}
         />
+        {formErrors.password && (
+          <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
+        )}
       </div>
-      <div className="flex flex-col mb-4">
-        <label htmlFor="confirm-password" className="mb-2">
+
+      {/* Confirm Password */}
+      <div className="flex flex-col mb-2">
+        <label htmlFor="confirmPassword" className="mb-2">
           تکرار پسورد
         </label>
         <input
           className="border border-gray-300 p-2 rounded"
           type="password"
-          name="confirm-password"
-          id="confirm-password"
+          name="confirmPassword"
+          id="confirmPassword"
           placeholder="*******"
-          autoComplete="new-password"
+          value={form.confirmPassword}
+          onChange={handleChange}
         />
+        {formErrors.confirmPassword && (
+          <p className="text-red-500 text-sm mt-1">
+            {formErrors.confirmPassword}
+          </p>
+        )}
       </div>
+
+      {/* Birthday */}
       <div className="flex flex-col mb-4">
-        <label htmlFor="birthday" className="mb-2">
-          تاریخ تولد
-        </label>
-        <JalaliCalendarDate value={date} onChange={handleDateChange} />
+        <label className="mb-2">تاریخ تولد</label>
+        <JalaliCalendarDate value={birthday} onChange={handleDateChange} />
       </div>
+
       <div className="flex flex-col mt-8">
         <button
           type="submit"
-          className="bg-teal-600 hover:bg-teal-700 hover:cursor-pointer py-2 px-8 text-white"
+          disabled={loading}
+          className="bg-teal-600 hover:bg-teal-700 py-2 px-8 text-white"
         >
-          ورود
+          {loading ? "در حال ثبت‌نام..." : "ثبت‌نام"}
         </button>
       </div>
     </form>

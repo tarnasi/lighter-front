@@ -12,7 +12,6 @@ type Props = {
 };
 
 export default function JalaliCalendarDate({ value, onChange }: Props) {
-  const { date, setDate } = useDaeStore();
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center p-4 border border-gray-300 rounded text-black">
@@ -24,9 +23,9 @@ export default function JalaliCalendarDate({ value, onChange }: Props) {
         format="MM/DD/YYYY HH:mm:ss"
         // plugins={[<TimePicker position="bottom" />]}
       />
-      {date ? (
+      {value ? (
         <span className="ml-4 text-sm text-gray-800">
-          تاریخ انتخاب‌ شده: {date.format("YYYY/MM/DD")}
+          تاریخ انتخاب‌ شده: {value.format("YYYY/MM/DD")}
         </span>
       ) : (
         <span className="ml-4 text-sm text-center text-red-400">
