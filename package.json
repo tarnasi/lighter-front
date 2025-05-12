@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
     "dayjs": "^1.11.13",
+    "graphql": "^16.11.0",
     "jalaliday": "^2.3.0",
+    "js-cookie": "^3.0.5",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

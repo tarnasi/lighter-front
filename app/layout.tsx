@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import dayjs from 'dayjs'
 import "./globals.css";
+import ApolloWrapper from "@/apollo/ApolloWrapper";
 
 export const metadata: Metadata = {
   title: "پخش سوسنی",
@@ -13,12 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa" dir="rtl">
-      <body
-        className={`antialiased bg-white`}
-      >
-        {children}
-      </body>
-    </html>
+    <ApolloWrapper>
+      <html lang="fa" dir="rtl">
+        <body className={`antialiased bg-white`}>{children}</body>
+      </html>
+    </ApolloWrapper>
   );
 }
