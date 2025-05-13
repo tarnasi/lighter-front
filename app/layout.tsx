@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import ApolloWrapper from "@/apollo/ApolloWrapper";
@@ -18,10 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ApolloWrapper>
-      <html lang="fa" dir="rtl">
-        <body className={`antialiased`}>{children}</body>
-      </html>
-    </ApolloWrapper>
+    <html lang="fa" dir="rtl">
+      <body className="antialiased">
+        <ApolloWrapper>{children}</ApolloWrapper>
+      </body>
+    </html>
   );
 }

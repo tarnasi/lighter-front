@@ -38,15 +38,20 @@ const LoginForm = () => {
 
     try {
       const res = await login({ variables: { mobile, password } });
-      const token = res?.data?.login?.accessToken;
+      const token = res?.data?.login?.token;
+      const user = res?.data?.login?.user;
 
       if (token) {
         Cookies.set("accessToken", token, {
           expires: 7,
-          secure: process.env.NODE_ENV === "production",
+          // secure: process.env.NODE_ENV === "production",
           sameSite: "Lax",
         });
-        router.push("/panel");
+        Cookies.set("me", JSON.stringify(user), {
+          expires: 7,
+          sameSite: "Lax",
+        });
+        window.location.href = "/panel";
       } else {
         setErrors({ password: "توکن دریافتی نامعتبر بود." });
       }
