@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "@/apollo/queries";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [mobile, setMobile] = useState("");
@@ -12,8 +14,9 @@ const LoginForm = () => {
   const [errors, setErrors] = useState<{ mobile?: string; password?: string }>(
     {}
   );
+  const router = useRouter();
 
-  const [login, { loading, error, data }] = useMutation(LOGIN_MUTATION);
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
 
   const validate = () => {
     const newErrors: typeof errors = {};
@@ -35,17 +38,34 @@ const LoginForm = () => {
 
     try {
       const res = await login({ variables: { mobile, password } });
-      console.log("Login successful:", res.data);
-      // redirect, toast, etc.
-    } catch (err) {
+      const token = res?.data?.login?.accessToken;
+
+      if (token) {
+        Cookies.set("accessToken", token, {
+          expires: 7,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "Lax",
+        });
+        router.push("/panel");
+      } else {
+        setErrors({ password: "توکن دریافتی نامعتبر بود." });
+      }
+    } catch (err: any) {
       console.error("Login error:", err);
+      if (err?.graphQLErrors?.length) {
+        setErrors({ password: err.graphQLErrors[0].message });
+      } else {
+        setErrors({ password: "خطا در ورود. دوباره تلاش کنید." });
+      }
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-full w-100 md:w-1/2 lg:w-1/3 mt-8 p-4 rounded shadow-xl"
+      className={`h-full w-full md:w-1/2 lg:w-1/3 mt-8 p-4 rounded shadow-xl transition-opacity ${
+        loading ? "opacity-60 pointer-events-none" : ""
+      }`}
     >
       <Link
         href="/"
@@ -59,7 +79,10 @@ const LoginForm = () => {
           شماره موبایل
         </label>
         <input
-          className="border border-gray-500 p-2 rounded"
+          disabled={loading}
+          className={`border border-gray-500 p-2 rounded ${
+            loading ? "bg-gray-100 text-gray-400" : ""
+          }`}
           type="text"
           id="mobile"
           value={mobile}
@@ -77,7 +100,10 @@ const LoginForm = () => {
           پسورد
         </label>
         <input
-          className="border border-gray-500 p-2 rounded"
+          disabled={loading}
+          className={`border border-gray-500 p-2 rounded ${
+            loading ? "bg-gray-100 text-gray-400" : ""
+          }`}
           type="password"
           id="password"
           value={password}
@@ -100,11 +126,38 @@ const LoginForm = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`py-2 px-8 text-white ${
-            loading ? "bg-gray-500" : "bg-teal-600 hover:bg-teal-700"
+          className={`py-2 px-8 text-white flex justify-center items-center gap-2 ${
+            loading
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-teal-600 hover:bg-teal-700"
           }`}
         >
-          {loading ? "در حال ورود..." : "ورود"}
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                />
+              </svg>
+              <span>در حال ورود...</span>
+            </>
+          ) : (
+            "ورود"
+          )}
         </button>
 
         <p className="text-center mt-4 text-sm">
