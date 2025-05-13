@@ -4,9 +4,6 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import { IoHome } from "react-icons/io5";
-import { RiLoginBoxLine } from "react-icons/ri";
-
 type Props = {};
 
 const logo_name = "پخش سوسنی";

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ApolloWrapper from "@/apollo/ApolloWrapper";
+import moment from "moment-jalaali";
+import "moment/locale/fa";
+
+moment.locale("fa");
+moment.loadPersian({ dialect: "persian-modern" });
 
 export const metadata: Metadata = {
   title: "پخش سوسنی",
@@ -15,7 +20,7 @@ export default function RootLayout({
   return (
     <ApolloWrapper>
       <html lang="fa" dir="rtl">
-        <body className={`antialiased bg-white`}>{children}</body>
+        <body className={`antialiased`}>{children}</body>
       </html>
     </ApolloWrapper>
   );

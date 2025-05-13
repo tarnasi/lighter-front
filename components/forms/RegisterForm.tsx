@@ -12,10 +12,12 @@ const RegisterForm = () => {
   const router = useRouter();
 
   const [form, setForm] = useState({
+    full_name: "",
     mobile: "",
     email: "",
     password: "",
     confirmPassword: "",
+    wholesaler: false,
   });
 
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -37,6 +39,7 @@ const RegisterForm = () => {
     const errors: Record<string, string> = {};
     if (!/^09\d{9}$/.test(form.mobile))
       errors.mobile = "شماره موبایل معتبر نیست";
+    if (!form.full_name) errors.full_name = "این فیلد اجباری است";
     if (!form.password) errors.password = "پسورد را وارد کنید";
     if (form.password !== form.confirmPassword)
       errors.confirmPassword = "رمزها یکسان نیستند";
@@ -55,10 +58,12 @@ const RegisterForm = () => {
     try {
       const { data } = await register({
         variables: {
+          full_name: form.full_name,
           mobile: form.mobile,
           email: form.email || undefined,
           password: form.password,
           birthday: birthday ? birthday.toDate().toISOString() : undefined,
+          wholesaler: form.wholesaler,
         },
       });
 
@@ -69,6 +74,10 @@ const RegisterForm = () => {
     } catch (err: any) {
       setApiError(err.message || "خطایی رخ داده است");
     }
+  };
+
+  const handleWholesalerChange = (value: boolean) => {
+    setForm({ ...form, wholesaler: value });
   };
 
   return (
@@ -88,7 +97,7 @@ const RegisterForm = () => {
       )}
 
       {/* Mobile */}
-      <div className="flex flex-col mt-6 mb-2">
+      <div className="flex flex-col mt-6 mb-4">
         <label htmlFor="mobile" className="mb-2">
           موبایل
         </label>
@@ -107,7 +116,7 @@ const RegisterForm = () => {
       </div>
 
       {/* Email */}
-      <div className="flex flex-col mb-2">
+      <div className="flex flex-col mb-4">
         <label htmlFor="email" className="mb-2">
           ایمیل (اختیاری)
         </label>
@@ -122,8 +131,27 @@ const RegisterForm = () => {
         />
       </div>
 
-      {/* Password */}
+      {/* NAME */}
       <div className="flex flex-col mb-2">
+        <label htmlFor="full_name" className="mb-4">
+          نام و نام خانوادگی
+        </label>
+        <input
+          className="border border-gray-300 p-2 rounded"
+          type="text"
+          name="full_name"
+          id="full_name"
+          placeholder="علی همتا"
+          value={form.full_name}
+          onChange={handleChange}
+        />
+        {formErrors.full_name && (
+          <p className="text-red-500 text-sm mt-1">{formErrors.full_name}</p>
+        )}
+      </div>
+
+      {/* Password */}
+      <div className="flex flex-col mb-4">
         <label htmlFor="password" className="mb-2">
           پسورد
         </label>
@@ -142,7 +170,7 @@ const RegisterForm = () => {
       </div>
 
       {/* Confirm Password */}
-      <div className="flex flex-col mb-2">
+      <div className="flex flex-col mb-4">
         <label htmlFor="confirmPassword" className="mb-2">
           تکرار پسورد
         </label>
@@ -160,6 +188,34 @@ const RegisterForm = () => {
             {formErrors.confirmPassword}
           </p>
         )}
+      </div>
+
+      <div className="flex flex-col mb-4">
+        <label className="mb-2">آیا عمده‌فروش هستید؟</label>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            className={`px-4 py-2 rounded ${
+              form.wholesaler
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+            onClick={() => handleWholesalerChange(true)}
+          >
+            بله
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded ${
+              !form.wholesaler
+                ? "bg-red-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+            onClick={() => handleWholesalerChange(false)}
+          >
+            خیر
+          </button>
+        </div>
       </div>
 
       {/* Birthday */}

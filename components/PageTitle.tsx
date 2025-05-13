@@ -3,19 +3,22 @@ import Link from "next/link";
 type Props = {
   title: string;
   returnLink?: string;
+  returnTitle?: string;
 };
 
-const PageTitle = ({ title, returnLink }: Props) => {
+const PageTitle = ({ title, returnLink, returnTitle }: Props) => {
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-gray-200">
-      {returnLink && (
-        <Link href={returnLink}>
-          <div className="text-sm text-sky-600">
-            برگشت به صفحه قبل &larr;
-          </div>
-        </Link>
-      )}
-      <div className="text-teal-700 text-sm">{title}</div>
+    <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-gray-200 text-gray-800">
+      <div className="flex items-center justify-between px-4 py-2">
+        {returnLink && (
+          <Link href={returnLink}>
+            <div className="text-sm text-sky-600 hover:underline hover:underline-offset-4">
+              {returnTitle ? returnTitle : `برگشت به صفحه قبل`}
+            </div>
+          </Link>
+        )}
+        <div className="text-teal-700 text-sm">{title}</div>
+      </div>
     </div>
   );
 };

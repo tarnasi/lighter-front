@@ -1,15 +1,17 @@
 import Navbar from '@/components/Navbar'
-import UserTable from '@/components/tables/UserTables'
+import PageTitle from '@/components/PageTitle'
+import InfoCards from '@/components/panels/InfoCards'
 import React from 'react'
 
 type Props = {}
 
 const PanelPage = async (props: Props) => {
   return (
-    <>
+    <div className='bg-white min-h-screen'>
       <Navbar />
-      <UserTable />
-    </>
+      <PageTitle title='پنل مدیریت' returnLink='/' returnTitle='رفتن به سایت' />
+      <InfoCards />
+    </div>
   )
 }
 

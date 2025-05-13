@@ -6,10 +6,12 @@ export const LOGIN_MUTATION = gql`
       token
       user {
         id
+        full_name
         mobile
         email
         birthday
         role
+        wholesaler
       }
     }
   }
@@ -17,24 +19,30 @@ export const LOGIN_MUTATION = gql`
 
 export const REGISTER_MUTATION = gql`
   mutation Register(
+    $full_name: String!
     $mobile: String!
     $email: String
     $password: String!
     $birthday: String
+    $wholesaler: Boolean
   ) {
     register(
+      full_name: $full_name
       mobile: $mobile
       email: $email
       password: $password
       birthday: $birthday
+      wholesaler: $wholesaler
     ) {
       token
       user {
         id
+        full_name
         mobile
         email
         birthday
         role
+        wholesaler
       }
     }
   }
@@ -44,9 +52,12 @@ export const ME_QUERY = gql`
   query Me {
     me {
       id
-      username
+      full_name
+      mobile
       email
+      birthday
       role
+      wholesaler
     }
   }
 `;
@@ -56,10 +67,12 @@ export const USER_LIST_QUERY = gql`
   query UserList {
     userList {
       id
+      full_name
       mobile
       email
       role
       birthday
+      wholesaler
     }
   }
 `;
