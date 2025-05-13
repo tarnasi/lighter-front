@@ -83,7 +83,7 @@ const RegisterForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-full w-4/5 md:w-4/6 lg:w-5/12 mt-8 p-4 rounded shadow-xl"
+      className="h-full w-4/5 md:w-4/6 lg:w-5/12 my-8 p-4 rounded shadow-xl"
     >
       <Link
         href="/"
