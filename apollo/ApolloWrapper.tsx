@@ -22,8 +22,8 @@ export default function ApolloWrapper({
     console.log("accessToken (client): ", token);
 
     const httpLink = createHttpLink({
-      // uri: "http://192.168.70.25:4000/graphql",
-      uri: "http://10.200.253.66:4000/graphql",
+      uri: "http://192.168.70.25:4000/graphql",
+      // uri: "http://10.200.253.66:4000/graphql",
     });
 
     const authLink = setContext((_, { headers }) => ({

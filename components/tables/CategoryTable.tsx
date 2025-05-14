@@ -7,7 +7,6 @@ import LoadingSkeleton from "../LoadingSkeleton";
 
 import { FaTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
-import JalaliDateConverter from "../JalaliDateConverter";
 import Link from "next/link";
 import { DELETE_CATEGORY_MUTATION } from "@/apollo/mutations";
 
@@ -23,6 +22,10 @@ const CategoryTable = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    refetch();
+  }, []);
+
   if (loading) return <LoadingSkeleton />;
   if (error) return <p className="text-red-500">{error.message}</p>;
 
@@ -37,9 +40,10 @@ const CategoryTable = () => {
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
+      {/* DESKTOP */}
       <div className="hidden md:block overflow-x-auto py-8">
         <Link
-          href="/panel/users/create"
+          href="/panel/categories/create"
           className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
         >
           ایجاد دسته بندی جدید
@@ -47,32 +51,43 @@ const CategoryTable = () => {
         <table className="w-full min-w-[600px] border mt-4 text-center">
           <thead>
             <tr className="bg-teal-800 text-gray-200 text-sm">
-              <th className="p-2 border">#</th>
               <th className="p-2 border">نام</th>
               <th className="p-2 border">نام انگلیسی (SEO)</th>
               <th className="p-2 border">توضیحات</th>
+              <th className="p-2 border">تصویر</th>
               <th className="p-2 border">ویرایش</th>
               <th className="p-2 border">حذف</th>
             </tr>
           </thead>
           <tbody>
             {data?.categoryList?.map((category: any) => (
-              <tr key={category.id} className="text-sm text-black">
+              <tr key={category.id} className="text-lg text-black">
                 <td className="p-2 border">{category.name}</td>
                 <td className="p-2 border">{category.slug}</td>
-                <td className="p-2 border">{category.description || "-"}</td>
                 <td className="p-2 border">
-                  <JalaliDateConverter datetime={category.birthday} />
+                  {category.description || (
+                    <span className="text-gray-500">ثبت نشده</span>
+                  )}
+                </td>
+                <td className="p-2 border">
+                  {category.image || (
+                    <span className="text-gray-500">ثبت نشده</span>
+                  )}
                 </td>
                 <td className="p-2 border">
                   <div className="flex items-center justify-evenly gap-2">
                     <span>
                       <FaEdit className="text-blue-900 hover:text-sky-500 hover:cursor-pointer" />
                     </span>
+                  </div>
+                </td>
+                <td className="p-2 border">
+                  <div className="flex items-center justify-evenly gap-2">
                     <span>
-                      <FaTrashCan 
-                      onClick={() => handleDeleteCategory(category.id)}
-                      className="text-red-600 hover:text-amber-500 hover:cursor-pointer" />
+                      <FaTrashCan
+                        onClick={() => handleDeleteCategory(category.id)}
+                        className="text-red-600 hover:text-amber-500 hover:cursor-pointer"
+                      />
                     </span>
                   </div>
                 </td>
@@ -82,6 +97,7 @@ const CategoryTable = () => {
         </table>
       </div>
 
+      {/* MOBILE */}
       <div className="md:hidden grid grid-cols-1 gap-4 p-4 text-black">
         {data?.categoryList?.map((category: any) => (
           <div

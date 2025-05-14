@@ -48,9 +48,20 @@ export const REGISTER_MUTATION = gql`
   }
 `;
 
-
 export const DELETE_CATEGORY_MUTATION = gql`
   mutation DeleteCategory($id: ID!) {
     deleteCategory(id: $id)
+  }
+`;
+
+export const CATEGORY_CREATE_MUTATION = gql`
+  mutation CreateCategory($input: CreateCategoryInput!) {
+    createCategory(input: $input) {
+      id
+      name
+      slug
+      image
+      description
+    }
   }
 `;
