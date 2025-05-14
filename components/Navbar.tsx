@@ -4,20 +4,42 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Cookies from "js-cookie";
+import { useUserStore } from "@/stores/userStore";
+import { useLazyQuery } from "@apollo/client";
+
+import { ME_QUERY } from "@/apollo/queries";
 
 const logo_name = "پخش سوسنی";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const setUser = useUserStore((state) => state.setUser);
+  const user = useUserStore((state) => state.user);
+
+  const [getMe, { called, data, loading }] = useLazyQuery(ME_QUERY, {
+    fetchPolicy: "network-only"
+  });
 
   useEffect(() => {
     const token = Cookies.get("accessToken");
-    setIsLoggedIn(!!token);
+    if (token) {
+      setIsLoggedIn(true);
+      if (!called && !user) {
+        getMe();
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    if (data?.me) {
+      setUser(data.me);
+    }
+  }, [data, setUser])
 
   const handleLogout = () => {
     Cookies.remove("accessToken");
-    Cookies.remove("user");
+    Cookies.remove("me");
+    setIsLoggedIn(false);
     window.location.href = "/"; // یا /login یا هر جا
   };
 
@@ -26,10 +48,12 @@ export default function Navbar() {
       <div className="flex items-center justify-between h-14">
         <Link href="/" className="flex justify-center items-center gap-2">
           <Image src="/logo/logo-3.png" alt="logo" width={32} height={32} />
-          <div className="text-lg tracking-wide font-bold">{logo_name}</div>
+          <div className="text-xs md:text-lg tracking-wide font-bold">
+            {logo_name}
+          </div>
         </Link>
 
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3 text-xs md:text-lg">
           <Link href="/" className="text-teal-600 hover:text-teal-900">
             خانه
           </Link>
@@ -49,7 +73,6 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex gap-3 items-center">
-              <span className="text-sm text-gray-600">خوش آمدید</span>
               <Link href="/panel" className="text-teal-600 hover:text-teal-900">
                 داشبورد
               </Link>

@@ -7,6 +7,7 @@ import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "@/apollo/queries";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/userStore";
 
 const LoginForm = () => {
   const [mobile, setMobile] = useState("");
@@ -14,7 +15,8 @@ const LoginForm = () => {
   const [errors, setErrors] = useState<{ mobile?: string; password?: string }>(
     {}
   );
-  const router = useRouter();
+  
+  const setUser = useUserStore((state) => state.setUser)
 
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
 
@@ -51,6 +53,7 @@ const LoginForm = () => {
           expires: 7,
           sameSite: "Lax",
         });
+        setUser(user)
         window.location.href = "/panel";
       } else {
         setErrors({ password: "توکن دریافتی نامعتبر بود." });

@@ -1,18 +1,18 @@
-import Navbar from '@/components/Navbar'
-import PageTitle from '@/components/PageTitle'
-import InfoCards from '@/components/panels/InfoCards'
-import React from 'react'
+import Navbar from "@/components/Navbar";
+import PageTitle from "@/components/PageTitle";
+import InfoCards from "@/components/panels/InfoCards";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const PanelPage = async (props: Props) => {
   return (
-    <div className='bg-white min-h-screen'>
+    <div className="bg-white min-h-screen">
       <Navbar />
-      <PageTitle title='پنل مدیریت' returnLink='/' returnTitle='رفتن به سایت' />
+      <PageTitle title="پنل مدیریت" returnLink="/" returnTitle="رفتن به سایت" />
       <InfoCards />
     </div>
-  )
-}
+  );
+};
 
 export default PanelPage;

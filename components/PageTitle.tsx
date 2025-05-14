@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 type Props = {
@@ -17,7 +19,7 @@ const PageTitle = ({ title, returnLink, returnTitle }: Props) => {
             </div>
           </Link>
         )}
-        <div className="text-teal-700 text-sm">{title}</div>
+        <div className="text-teal-700">{title}</div>
       </div>
     </div>
   );
