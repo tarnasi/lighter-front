@@ -1,53 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const LOGIN_MUTATION = gql`
-  mutation Login($mobile: String!, $password: String!) {
-    login(mobile: $mobile, password: $password) {
-      token
-      user {
-        id
-        full_name
-        mobile
-        email
-        birthday
-        role
-        wholesaler
-      }
-    }
-  }
-`;
-
-export const REGISTER_MUTATION = gql`
-  mutation Register(
-    $full_name: String!
-    $mobile: String!
-    $email: String
-    $password: String!
-    $birthday: String
-    $wholesaler: Boolean
-  ) {
-    register(
-      full_name: $full_name
-      mobile: $mobile
-      email: $email
-      password: $password
-      birthday: $birthday
-      wholesaler: $wholesaler
-    ) {
-      token
-      user {
-        id
-        full_name
-        mobile
-        email
-        birthday
-        role
-        wholesaler
-      }
-    }
-  }
-`;
-
 export const ME_QUERY = gql`
   query Me {
     me {
@@ -62,7 +14,6 @@ export const ME_QUERY = gql`
   }
 `;
 
-
 export const USER_LIST_QUERY = gql`
   query UserList {
     userList {
@@ -73,6 +24,30 @@ export const USER_LIST_QUERY = gql`
       role
       birthday
       wholesaler
+    }
+  }
+`;
+
+export const CATEGORY_LIST_QUERY = gql`
+  query CategoryList {
+    categoryList {
+      id
+      name
+      slug
+      description
+      image
+    }
+  }
+`;
+
+export const BRAND_LIST_QUERY = gql`
+  query BrandList {
+    brandList {
+      id
+      name
+      slug
+      description
+      image
     }
   }
 `;

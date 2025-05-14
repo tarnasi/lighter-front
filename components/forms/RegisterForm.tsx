@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@apollo/client";
-import { REGISTER_MUTATION } from "@/apollo/queries";
+import { REGISTER_MUTATION } from "@/apollo/mutations";
 import JalaliCalendarDate from "./inputs/JalaliCalendarDate";
 import Link from "next/link";
 import Image from "next/image";

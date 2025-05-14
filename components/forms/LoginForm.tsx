@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN_MUTATION } from "@/apollo/queries";
+import { LOGIN_MUTATION } from "@/apollo/mutations";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/userStore";

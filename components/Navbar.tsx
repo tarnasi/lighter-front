@@ -48,7 +48,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between h-14">
         <Link href="/" className="flex justify-center items-center gap-2">
           <Image src="/logo/logo-3.png" alt="logo" width={32} height={32} />
-          <div className="text-xs md:text-lg tracking-wide font-bold">
+          <div className="text-sm md:text-lg tracking-wide font-bold">
             {logo_name}
           </div>
         </Link>

@@ -16,9 +16,7 @@ const UserTable = () => {
   const { data, loading, error } = useQuery(USER_LIST_QUERY);
 
   useEffect(() => {
-    if (error?.message.includes("مجاز")) {
-      router.push("/");
-    }
+    if (error?.message.includes("مجاز")) {}
   }, [error]);
 
   if (loading) return <LoadingSkeleton />;
