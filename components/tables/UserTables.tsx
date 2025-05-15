@@ -16,7 +16,8 @@ const UserTable = () => {
   const { data, loading, error } = useQuery(USER_LIST_QUERY);
 
   useEffect(() => {
-    if (error?.message.includes("مجاز")) {}
+    if (error?.message.includes("مجاز")) {
+    }
   }, [error]);
 
   if (loading) return <LoadingSkeleton />;
@@ -66,34 +67,43 @@ const UserTable = () => {
         </table>
       </div>
 
-      <div className="md:hidden grid grid-cols-1 gap-4 p-4 text-black">
+      <div className="md:hidden grid grid-cols-1 gap-4 py-4">
         {data?.userList?.map((user: any) => (
           <div
             key={user.id}
-            className="border p-4 rounded shadow text-sm border-gray-200"
+            className="border px-4 pb-1 pt-3 rounded text-sm border-gray-200"
           >
-            <p>
-              <strong>موبایل:</strong> {user.full_name}
-            </p>
-            <p>
-              <strong>موبایل:</strong> {user.mobile}
-            </p>
-            <p>
-              <strong>ایمیل:</strong> {user.email || "-"}
-            </p>
-            <p>
-              <strong>نقش:</strong> {user.role}
-            </p>
-            <p>
-              <strong>تاریخ تولد:</strong>{" "}
-              <JalaliDateConverter datetime={user.birthday} />
-            </p>
-            <div className="flex items-center justify-evenly mt-4">
-              <button className="shadow px-8 p-2 text-yellow-400">
-                <FaEdit />
-              </button>
-              <button className="shadow px-8 p-2 text-yellow-400">
-                <FaTrashCan className="text-red-600" />
+            <div>
+              <p>
+                <strong>موبایل:</strong> {user.full_name}
+              </p>
+              <p>
+                <strong>موبایل:</strong> {user.mobile}
+              </p>
+              <p>
+                <strong>ایمیل:</strong> {user.email || "-"}
+              </p>
+              <p>
+                <strong>نقش:</strong> {user.role}
+              </p>
+              <p>
+                <strong>تاریخ تولد:</strong>{" "}
+                <JalaliDateConverter datetime={user.birthday} />
+              </p>
+            </div>
+            <div className="flex items-center justify-evenly mt-4 border-t-2 pt-6 pb-4">
+              <Link
+                href={`/panel/users/update`}
+                className="flex items-center justify-evenly gap-2 shadow px-8 p-2 text-blue-400 hover:text-blue-900 hover:cursor-pointer"
+              >
+                <FaEdit /> ویرایش
+              </Link>
+              <button
+                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
+                // onClick={() => handleDeleteCategory(category.id)}
+              >
+                <FaTrashCan />
+                حذف
               </button>
             </div>
           </div>

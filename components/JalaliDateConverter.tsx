@@ -12,7 +12,7 @@ type Props = {
 
 export default function JalaliDateConverter({ datetime }: Props) {
   return (
-    <span>
+    <span className="text-xs">
       {datetime ? moment(Number(datetime)).format("dddd jD jMMMM jYYYY") : "-"}
     </span>
   );
