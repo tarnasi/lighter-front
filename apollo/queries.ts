@@ -48,6 +48,11 @@ export const BRAND_LIST_QUERY = gql`
       slug
       description
       image
+      category {
+        id
+        name
+        slug
+      }
     }
   }
 `;

@@ -4,7 +4,7 @@ import PageTitle from "@/components/PageTitle";
 
 type Props = {};
 
-const CreateCategoryPage = (props: Props) => {
+const CreateCategoryPage = async (props: Props) => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />

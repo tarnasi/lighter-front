@@ -77,3 +77,10 @@ export const CATEGORY_UPDATE_MUTATION = gql`
     }
   }
 `;
+
+
+export const BRAND_DELETE_MUTATION = gql`
+  mutation DeleteBrand($id: ID!) {
+    deleteBrand(id: $id)
+  }
+`
