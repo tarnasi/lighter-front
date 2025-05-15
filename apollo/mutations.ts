@@ -65,3 +65,15 @@ export const CATEGORY_CREATE_MUTATION = gql`
     }
   }
 `;
+
+export const CATEGORY_UPDATE_MUTATION = gql`
+  mutation UpdateCategory($input: UpdateCategoryInput!) {
+    updateCategory(input: $input) {
+      id
+      name
+      slug
+      image
+      description
+    }
+  }
+`;

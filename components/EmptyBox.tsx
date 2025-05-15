@@ -10,7 +10,7 @@ const EmptyBox = (props: Props) => {
         alt="No products"
         className="w-48 h-48 mb-6"
       />
-      <p className="text-xl font-semibold">محصولی یافت نشد</p>
+      <p className="text-xl font-semibold">یافت نشد</p>
       <p className="text-sm text-gray-400">
         در صورت عضویت در خبرنامه سایت محصولات جدید بعد بارگذاری به اطلاع شما
         خواهد رسید

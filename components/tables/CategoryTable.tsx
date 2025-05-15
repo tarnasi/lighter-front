@@ -9,12 +9,14 @@ import { FaTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import Link from "next/link";
 import { DELETE_CATEGORY_MUTATION } from "@/apollo/mutations";
+import EmptyBox from "../EmptyBox";
+import Image from "next/image";
 
 const CategoryTable = () => {
   const { data, loading, error, refetch } = useQuery(CATEGORY_LIST_QUERY);
   const [deleteCategory, { loading: deleteLoading, error: deleteError }] =
     useMutation(DELETE_CATEGORY_MUTATION, {
-      refetchQueries: ["CategoryList"], // or use a `refetch()` manually
+      refetchQueries: ["CategoryList"],
     });
 
   useEffect(() => {
@@ -37,6 +39,10 @@ const CategoryTable = () => {
       console.error("Failed to delete category", err);
     }
   };
+
+  if (data?.categoryList?.length === 0) {
+    return <EmptyBox />;
+  }
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
@@ -69,17 +75,17 @@ const CategoryTable = () => {
                     <span className="text-gray-500">ثبت نشده</span>
                   )}
                 </td>
-                <td className="p-2 border">
-                  {category.image || (
+                <td className="p-2 flex items-center justify-center">
+                  <Image src={category.image || (
                     <span className="text-gray-500">ثبت نشده</span>
-                  )}
+                  )} alt="عکس" width={48} height={48} className="object-cover rounded-md" />
                 </td>
                 <td className="p-2 border">
-                  <div className="flex items-center justify-evenly gap-2">
+                  <Link href={`/panel/categories/update/${category.id}`} className="flex items-center justify-evenly gap-2">
                     <span>
                       <FaEdit className="text-blue-900 hover:text-sky-500 hover:cursor-pointer" />
                     </span>
-                  </div>
+                  </Link>
                 </td>
                 <td className="p-2 border">
                   <div className="flex items-center justify-evenly gap-2">
@@ -99,6 +105,12 @@ const CategoryTable = () => {
 
       {/* MOBILE */}
       <div className="md:hidden grid grid-cols-1 gap-4 p-4 text-black">
+        <Link
+          href="/panel/categories/create"
+          className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
+        >
+          ایجاد دسته بندی جدید
+        </Link>
         {data?.categoryList?.map((category: any) => (
           <div
             key={category.id}
@@ -111,17 +123,19 @@ const CategoryTable = () => {
               <strong>نام انگلیسی (SEO):</strong> {category.slug}
             </p>
             <p>
-              <strong>توضیحات:</strong> {category.desciprion || "-"}
+              <strong>توضیحات:</strong> {category.description || "-"}
             </p>
             <div className="flex items-center justify-evenly mt-4">
-              <button className="shadow px-8 p-2 text-yellow-400">
-                <FaEdit />
-              </button>
+              <Link href={`/panel/categories/update/${category.id}`}
+              className="shadow px-8 p-2 text-blue-400 hover:cursor-pointer"
+              >
+                <FaEdit className="hover:text-blue-900" />
+              </Link>
               <button
-                className="shadow px-8 p- hover:text-yellow-500 bg-black"
+                className="shadow px-8 p-2 text-red-500"
                 onClick={() => handleDeleteCategory(category.id)}
               >
-                <FaTrashCan className="text-red-600 hover:cursor-pointer" />
+                <FaTrashCan className="hover:text-red-700 hover:cursor-pointer" />
               </button>
             </div>
           </div>
