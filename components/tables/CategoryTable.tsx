@@ -76,12 +76,23 @@ const CategoryTable = () => {
                   )}
                 </td>
                 <td className="p-2 flex items-center justify-center">
-                  <Image src={category.image || (
-                    <span className="text-gray-500">ثبت نشده</span>
-                  )} alt="عکس" width={48} height={48} className="object-cover rounded-md" />
+                  <Image
+                    src={
+                      category.image || (
+                        <span className="text-gray-500">ثبت نشده</span>
+                      )
+                    }
+                    alt="عکس"
+                    width={48}
+                    height={48}
+                    className="object-cover rounded-md"
+                  />
                 </td>
                 <td className="p-2 border">
-                  <Link href={`/panel/categories/update/${category.id}`} className="flex items-center justify-evenly gap-2">
+                  <Link
+                    href={`/panel/categories/update/${category.id}`}
+                    className="flex items-center justify-evenly gap-2"
+                  >
                     <span>
                       <FaEdit className="text-blue-900 hover:text-sky-500 hover:cursor-pointer" />
                     </span>
@@ -104,7 +115,7 @@ const CategoryTable = () => {
       </div>
 
       {/* MOBILE */}
-      <div className="md:hidden grid grid-cols-1 gap-4 p-4 text-black">
+      <div className="md:hidden grid grid-cols-1 gap-4 py-4">
         <Link
           href="/panel/categories/create"
           className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
@@ -114,28 +125,44 @@ const CategoryTable = () => {
         {data?.categoryList?.map((category: any) => (
           <div
             key={category.id}
-            className="border p-4 rounded shadow text-sm border-gray-200"
+            className="border px-4 pb-1 pt-3 rounded text-sm border-gray-200"
           >
-            <p>
-              <strong>نام:</strong> {category.name}
-            </p>
-            <p>
-              <strong>نام انگلیسی (SEO):</strong> {category.slug}
-            </p>
-            <p>
-              <strong>توضیحات:</strong> {category.description || "-"}
-            </p>
-            <div className="flex items-center justify-evenly mt-4">
-              <Link href={`/panel/categories/update/${category.id}`}
-              className="shadow px-8 p-2 text-blue-400 hover:cursor-pointer"
+            <div className="flex justify-between items-center">
+              <div className="flex flex-col gap-1">
+                <p>
+                  <strong>نام:</strong> {category.name}
+                </p>
+                <p>
+                  <strong>نام انگلیسی (SEO):</strong> {category.slug}
+                </p>
+                <p>
+                  <strong>توضیحات:</strong> {category.description || "-"}
+                </p>
+              </div>
+              <Image
+                src={
+                  category.image || (
+                    <span className="text-gray-500">ثبت نشده</span>
+                  )
+                }
+                alt="عکس"
+                width={48}
+                height={48}
+                className="object-cover rounded-md"
+              />
+            </div>
+            <div className="flex items-center justify-evenly mt-4 border-t-2 pt-6 pb-4">
+              <Link
+                href={`/panel/categories/update/${category.id}`}
+                className="flex items-center justify-evenly gap-2 shadow px-8 p-2 text-blue-400 hover:text-blue-900 hover:cursor-pointer"
               >
-                <FaEdit className="hover:text-blue-900" />
+                <FaEdit /> ویرایش
               </Link>
               <button
-                className="shadow px-8 p-2 text-red-500"
+                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
                 onClick={() => handleDeleteCategory(category.id)}
               >
-                <FaTrashCan className="hover:text-red-700 hover:cursor-pointer" />
+                <FaTrashCan />حذف
               </button>
             </div>
           </div>
