@@ -102,7 +102,7 @@ export default function BrandTable({}: Props) {
                 </td>
                 <td className="p-2 border">
                   <Link
-                    href={`/panel/categories/update/${brand.id}`}
+                    href={`/panel/brands/update/${brand.id}`}
                     className="flex items-center justify-evenly gap-2"
                   >
                     <span>
@@ -168,7 +168,7 @@ export default function BrandTable({}: Props) {
             </div>
             <div className="flex items-center justify-evenly mt-4 border-t-2 pt-6 pb-4">
               <Link
-                href={`/panel/categories/update/${brand.id}`}
+                href={`/panel/brands/update/${brand.id}`}
                 className="flex items-center justify-evenly gap-2 shadow px-8 p-2 text-blue-400 hover:text-blue-900 hover:cursor-pointer"
               >
                 <FaEdit /> ویرایش

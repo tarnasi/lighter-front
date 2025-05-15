@@ -1,3 +1,4 @@
+import BrandForm from '@/components/forms/BrandForm'
 import Navbar from '@/components/Navbar'
 import PageTitle from '@/components/PageTitle'
 
@@ -8,10 +9,14 @@ type Props = {
 }
 
 async function BarndPage({params}: Props) {
+
+  const paramsObject = await params
+
   return (
     <div className='bg-white min-h-screen'>
       <Navbar />
       <PageTitle title='ویرایش برند' returnLink='/panel' returnTitle='برگشت' />
+      <BrandForm brandId={paramsObject.id} />
     </div>
   )
 }
