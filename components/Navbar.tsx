@@ -9,7 +9,7 @@ import { useLazyQuery } from "@apollo/client";
 
 import { ME_QUERY } from "@/apollo/queries";
 
-const logo_name = "پخش سوسنی";
+const logo_name = "فروشگاه";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,7 +54,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center justify-center gap-3 text-xs md:text-lg">
-          <Link href="/" className="text-teal-600 hover:text-teal-900">
+          <Link href="/" className="text-teal-600 hover:text-teal-900 text-sm md:text-base">
             خانه
           </Link>
 
@@ -62,23 +62,22 @@ export default function Navbar() {
             <div className="flex gap-1">
               <Link
                 href="/register"
-                className="text-teal-600 hover:text-teal-900"
+                className="text-teal-600 hover:text-teal-900 text-sm md:text-base"
               >
                 ثبت نام
               </Link>
-              <span>/</span>
-              <Link href="/login" className="text-teal-600 hover:text-teal-900">
+              <Link href="/login" className="text-teal-600 hover:text-teal-900 text-sm md:text-base">
                 ورود
               </Link>
             </div>
           ) : (
             <div className="flex gap-3 items-center">
-              <Link href="/panel" className="text-teal-600 hover:text-teal-900">
+              <Link href="/panel" className="text-teal-600 hover:text-teal-900 text-sm md:text-base">
                 داشبورد
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-red-500 hover:text-red-700 text-sm"
+                className="text-red-500 hover:text-red-800 text-sm md:text-base hover:cursor-pointer"
               >
                 خروج
               </button>

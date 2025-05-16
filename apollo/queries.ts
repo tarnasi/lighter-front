@@ -40,6 +40,18 @@ export const CATEGORY_LIST_QUERY = gql`
   }
 `;
 
+export const CATEGORY_BY_ID_QUERY = gql`
+  query Category($id: ID!) {
+    category(id: $id) {
+      id
+      name
+      slug
+      description
+      image
+    }
+  }
+`;
+
 export const BRAND_LIST_QUERY = gql`
   query BrandList {
     brandList {
@@ -53,18 +65,6 @@ export const BRAND_LIST_QUERY = gql`
         name
         slug
       }
-    }
-  }
-`;
-
-export const CATEGORY_BY_ID_QUERY = gql`
-  query Category($id: ID!) {
-    category(id: $id) {
-      id
-      name
-      slug
-      description
-      image
     }
   }
 `;

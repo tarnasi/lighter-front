@@ -48,7 +48,7 @@ export const REGISTER_MUTATION = gql`
   }
 `;
 
-export const DELETE_CATEGORY_MUTATION = gql`
+export const CATEGORY_DELETE_MUTATION = gql`
   mutation DeleteCategory($id: ID!) {
     deleteCategory(id: $id)
   }
@@ -83,4 +83,40 @@ export const BRAND_DELETE_MUTATION = gql`
   mutation DeleteBrand($id: ID!) {
     deleteBrand(id: $id)
   }
-`
+`;
+
+
+export const BRAND_CREATE_MUTATION = gql`
+  mutation CreateBrand($input: CreateBrandInput!) {
+      createBrand(input: $input) {
+        id
+        name
+        slug
+        description
+        image
+        category {
+          id
+          name
+          slug
+        }
+      }
+    }
+`;
+
+
+export const BRAND_UPDATE_MUTATION = gql`
+  mutation UpdateBrand($input: UpdateBrandInput!) {
+      updateBrand(input: $input) {
+        id
+        name
+        slug
+        description
+        image
+        category {
+          id
+          name
+          slug
+        }
+      }
+    }
+`;

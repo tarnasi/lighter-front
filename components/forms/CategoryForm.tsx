@@ -69,7 +69,7 @@ const CategoryForm = (props: Props) => {
         setSlug("");
         setDesciption("");
         setImage("");
-          router.push("/panel/categories");
+        router.push("/panel/categories");
       }
     } catch (err: any) {
       console.error("creatory error:", err);

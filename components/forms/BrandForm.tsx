@@ -1,9 +1,14 @@
 "use client";
 
+import {
+  BRAND_CREATE_MUTATION,
+  BRAND_UPDATE_MUTATION,
+} from "@/apollo/mutations";
 import { BRAND_BY_ID_QUERY, CATEGORY_LIST_QUERY } from "@/apollo/queries";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 type Props = {
@@ -11,9 +16,10 @@ type Props = {
 };
 
 function BrandForm({ brandId }: Props) {
+
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [description, setDesciption] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
 
@@ -24,6 +30,8 @@ function BrandForm({ brandId }: Props) {
     image: "",
     category: "",
   });
+
+  const router = useRouter();
 
   const {
     data: categoryData,
@@ -38,6 +46,19 @@ function BrandForm({ brandId }: Props) {
     }
   );
 
+  const [
+    createBrand,
+    { loading: createBrandLoading, error: createBrandError },
+  ] = useMutation(BRAND_CREATE_MUTATION, {
+    fetchPolicy: "network-only",
+  });
+  const [
+    updateBrand,
+    { loading: updateBrandLoading, error: updateBrandError },
+  ] = useMutation(BRAND_UPDATE_MUTATION, {
+    fetchPolicy: "network-only",
+  });
+
   useEffect(() => {
     if (brandId && !called) {
       getCategory();
@@ -48,20 +69,66 @@ function BrandForm({ brandId }: Props) {
     if (data) {
       setName(data.brand.name);
       setSlug(data.brand.slug);
-      setDesciption(data.brand.description);
+      setDescription(data.brand.description);
       setImage(data.brand.image);
-      setCategory(data.brand.category.id);
+      setCategory(String(data.brand.category.id));
     }
   }, [data]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try{
+
+      if (!brandId) {
+        // DO CREATE
+        const createResp = await createBrand({
+          variables: {
+            input: {
+              name,
+              slug,
+              description,
+              image,
+              categoryId: category
+            }
+          }
+        })
+
+        if (createResp?.data?.createBrand) {
+          console.log("createResp?.data?.createBrand: ", createResp?.data?.createBrand);
+          router.push('/panel/brands')
+        }
+      }
+      else {
+        // DO CREATE
+        const updateResp = await updateBrand({
+          variables: {
+            input: {
+              id: brandId.toString(),
+              name,
+              slug,
+              description,
+              image,
+              categoryId: category
+            }
+          }
+        })
+
+        if (updateResp?.data?.updateBrand) {
+          console.log("createResp?.data?.createBrand: ", updateResp?.data?.createBrand);
+          router.push('/panel/brands')
+        }
+      }
+
+    } catch(error) {
+      console.log(error);
+    }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className={`h-full w-full md:w-1/2 lg:w-1/3 mt-8 p-4 rounded shadow-xl transition-opacity ${
+      className={`h-full w-full md:w-2/3 lg:w-2/4 xl:w-2/6 mt-8 p-4 rounded shadow-xl transition-opacity ${
         loading ? "opacity-60 pointer-events-none" : ""
       }`}
     >
@@ -84,7 +151,7 @@ function BrandForm({ brandId }: Props) {
             categoryLoading ? "bg-gray-100 text-gray-400" : ""
           }`}
           value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          onChange={(e) => setCategory(String(e.target.value))}
         >
           <option value="">انتخاب کنید...</option>
           {categoryData?.categoryList?.map((cat: any) => (
@@ -158,7 +225,7 @@ function BrandForm({ brandId }: Props) {
           }`}
           id="description"
           value={description}
-          onChange={(e) => setDesciption(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
           placeholder="توضیحات..."
           autoComplete="on"
         />
@@ -234,7 +301,7 @@ function BrandForm({ brandId }: Props) {
               <span>در حال ساخت...</span>
             </>
           ) : (
-            "ساخت"
+            brandId ? "ویرایش" : "ایجاد"
           )}
         </button>
         {error && (

@@ -75,7 +75,7 @@ export default function BrandTable({}: Props) {
           </thead>
           <tbody>
             {brandData?.brandList?.map((brand: any) => (
-              <tr key={brand.id} className="text-lg text-black">
+              <tr key={brand.id} className="text-lg text-black border">
                 <td className="p-2 border">
                   {brand.category.name}({brand.category.slug})
                 </td>
@@ -94,10 +94,10 @@ export default function BrandTable({}: Props) {
                       alt="عکس"
                       width={48}
                       height={48}
-                      className="object-cover rounded-md"
+                      className="object-cover"
                     />
                   ) : (
-                    <span className="text-gray-500">ثبت نشده</span>
+                    <span className="text-gray-500 text-sm">ثبت نشده</span>
                   )}
                 </td>
                 <td className="p-2 border">
