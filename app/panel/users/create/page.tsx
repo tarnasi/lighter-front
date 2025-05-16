@@ -1,7 +1,6 @@
 import RegisterForm from '@/components/forms/RegisterForm'
 import Navbar from '@/components/Navbar'
 import PageTitle from '@/components/PageTitle'
-import UserTable from '@/components/tables/UserTables'
 import React from 'react'
 
 type Props = {}

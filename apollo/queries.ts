@@ -85,3 +85,67 @@ export const BRAND_BY_ID_QUERY = gql`
     }
   }
 `;
+
+export const PRODUCT_LIST_QUERY = gql`
+  query ProductList {
+    productList {
+      id
+      title
+      slug
+      images
+      description
+      price
+      discount
+      quantity
+      is_pack
+      created_at
+      updated_at
+      category {
+        id
+        name
+        slug
+        description
+        image
+      }
+      brand {
+        id
+        name
+        slug
+        description
+        image
+      }
+    }
+  }
+`;
+
+export const PRODUCT_BY_ID_QUERY = gql`
+  query Product {
+    product {
+      id
+      title
+      slug
+      images
+      description
+      price
+      discount
+      quantity
+      is_pack
+      created_at
+      updated_at
+      category {
+        id
+        name
+        slug
+        description
+        image
+      }
+      brand {
+        id
+        name
+        slug
+        description
+        image
+      }
+    }
+  }
+`;

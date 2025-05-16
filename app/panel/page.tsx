@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
-import InfoCards from "@/components/panels/InfoCards";
+import InfoCards from "@/components/panel/InfoCards";
 import React from "react";
 
 type Props = {};

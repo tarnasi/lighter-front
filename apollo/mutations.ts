@@ -78,45 +78,112 @@ export const CATEGORY_UPDATE_MUTATION = gql`
   }
 `;
 
-
 export const BRAND_DELETE_MUTATION = gql`
   mutation DeleteBrand($id: ID!) {
     deleteBrand(id: $id)
   }
 `;
 
-
 export const BRAND_CREATE_MUTATION = gql`
   mutation CreateBrand($input: CreateBrandInput!) {
-      createBrand(input: $input) {
+    createBrand(input: $input) {
+      id
+      name
+      slug
+      description
+      image
+      category {
         id
         name
         slug
-        description
-        image
-        category {
-          id
-          name
-          slug
-        }
       }
     }
+  }
 `;
-
 
 export const BRAND_UPDATE_MUTATION = gql`
   mutation UpdateBrand($input: UpdateBrandInput!) {
-      updateBrand(input: $input) {
+    updateBrand(input: $input) {
+      id
+      name
+      slug
+      description
+      image
+      category {
+        id
+        name
+        slug
+      }
+    }
+  }
+`;
+
+export const PRODUCT_CREATE_MUTATION = gql`
+  mutation CreateProduct($input: CreateProductInput!) {
+    createProduct(input: $input) {
+      id
+      title
+      slug
+      images
+      description
+      price
+      discount
+      quantity
+      is_pack
+      created_at
+      updated_at
+      category {
         id
         name
         slug
         description
         image
-        category {
-          id
-          name
-          slug
-        }
+      }
+      brand {
+        id
+        name
+        slug
+        description
+        image
       }
     }
+  }
+`;
+
+export const PRODUCT_UPDATE_MUTATION = gql`
+  mutation CreateProduct($input: CreateProductInput!) {
+    createProduct(input: $input) {
+      id
+      title
+      slug
+      images
+      description
+      price
+      discount
+      quantity
+      is_pack
+      created_at
+      updated_at
+      category {
+        id
+        name
+        slug
+        description
+        image
+      }
+      brand {
+        id
+        name
+        slug
+        description
+        image
+      }
+    }
+  }
+`;
+
+export const PRODUCT_DELETE_MUTATION = gql`
+  mutation DeleteProduct(id: ID!) {
+    deleteProduct(id: $id)
+  }
 `;

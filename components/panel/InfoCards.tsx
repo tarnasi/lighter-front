@@ -75,7 +75,7 @@ export default function InfoCard() {
             ساخت جدید
           </Link>
           <Link
-            href="/panel/users"
+            href="/panel/products"
             className="bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-black text-center"
           >
             مشاهده

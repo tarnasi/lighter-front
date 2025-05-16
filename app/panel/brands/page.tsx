@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar'
 import PageTitle from '@/components/PageTitle'
-import BrandTable from '@/components/tables/BrandTable'
+import BrandTable from '@/components/panel/tables/BrandTable'
 import React from 'react'
 
 type Props = {}
