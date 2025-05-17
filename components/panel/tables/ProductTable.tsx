@@ -1,8 +1,9 @@
 "use client";
 
+import { PRODUCT_DELETE_MUTATION } from "@/apollo/mutations";
 import { PRODUCT_LIST_QUERY } from "@/apollo/queries";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -16,6 +17,7 @@ export default function ProductTable({}: Props) {
     data: productData,
     loading: productLoading,
     error: productError,
+    refetch: productRefetch
   } = useQuery(PRODUCT_LIST_QUERY);
 
   if (productLoading) {
@@ -26,8 +28,23 @@ export default function ProductTable({}: Props) {
     return <p>{productError.message}</p>;
   }
 
-  const handleDeleteProduct = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [deleteProduct, {error: deleteError, loading: deleteLoading}] = useMutation(
+    PRODUCT_DELETE_MUTATION,
+    {
+      fetchPolicy: 'network-only'
+    }
+  )
+
+  const handleDeleteProduct = async (id:string) => {
+    try{
+      await deleteProduct({
+        variables: { id }
+      })
+      await productRefetch()
+    }
+    catch(err) {
+      console.log(deleteError?.message);
+    }
   }
 
   return (
