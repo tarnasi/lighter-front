@@ -13,7 +13,7 @@ export default async function page({ params }: Props) {
     <>
       <Navbar />
       <PageTitle title="ویرایش محصول" returnLink="/panel/products" />
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-16">
         <ProductForm productId={params.productId} />
       </div>
     </>

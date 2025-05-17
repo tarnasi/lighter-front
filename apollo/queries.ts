@@ -48,6 +48,13 @@ export const CATEGORY_BY_ID_QUERY = gql`
       slug
       description
       image
+      brands {
+        id
+        name
+        slug
+        description
+        image
+      }
     }
   }
 `;

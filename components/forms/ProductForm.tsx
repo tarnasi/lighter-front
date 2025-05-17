@@ -1,47 +1,65 @@
 "use client";
 
 import {
-  BRAND_LIST_QUERY,
+  PRODUCT_CREATE_MUTATION,
+  PRODUCT_UPDATE_MUTATION,
+} from "@/apollo/mutations";
+import {
+  CATEGORY_BY_ID_QUERY,
   CATEGORY_LIST_QUERY,
   PRODUCT_BY_ID_QUERY,
 } from "@/apollo/queries";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   productId?: string;
 };
 
 function ProductForm({ productId }: Props) {
-  const [product, setProduct] = useState({
+  const router = useRouter();
+
+  const [product, setProduct] = useState<ProductInput>({
     title: "",
     slug: "",
     description: "",
-    price: "",
-    discount: "",
-    quantity: "",
-    is_pack: "",
+    price: 0,
+    discount: 0,
+    quantity: 0,
+    is_pack: false,
+    images: [],
     categoryId: "",
     brandId: "",
   });
-
-  const [productObject, setProductObject] = useState(null);
 
   const [errors, setErrors] = useState({
     title: "",
     slug: "",
     description: "",
-    price: "",
-    discount: "",
-    quantity: "",
-    is_pack: "",
+    price: 0,
+    discount: 0,
+    quantity: 0,
+    is_pack: false,
     categoryId: "",
     brandId: "",
     category: "",
+    images: [],
   });
 
+  const [
+    category,
+    {
+      called: categorySingleCalled,
+      data: categorySingleData,
+      loading: categorySingleLoading,
+      error: categorySingleError,
+    },
+  ] = useLazyQuery(CATEGORY_BY_ID_QUERY, {
+    fetchPolicy: "network-only",
+  });
   const [
     getProduct,
     {
@@ -56,25 +74,62 @@ function ProductForm({ productId }: Props) {
     loading: categoryLoading,
     error: categoryError,
   } = useQuery(CATEGORY_LIST_QUERY);
-  const {
-    data: brandData,
-    loading: brandLoading,
-    error: brandError,
-  } = useQuery(BRAND_LIST_QUERY);
+  const [
+    createProduct,
+    { loading: createProductLoading, error: createProductError },
+  ] = useMutation(PRODUCT_CREATE_MUTATION);
+  const [
+    updateProduct,
+    { loading: updateProductLoading, error: updateProductError },
+  ] = useMutation(PRODUCT_UPDATE_MUTATION);
 
   useEffect(() => {
     if (!productId && !productCalled) {
-      getProduct();
+      getProduct({ variables: { id: productId } });
     }
   }, [productId, productCalled]);
 
   useEffect(() => {
+    console.log("productData: ", productData);
     if (productData) {
+      setProduct({
+        ...product,
+        title: productData?.product.title,
+        slug: productData?.product.slug,
+        description: productData?.product.description,
+        price: productData?.product.price,
+        discount: productData?.product.discount,
+        quantity: productData?.product.quantity,
+        is_pack: productData?.product.is_pack,
+        categoryId: productData?.product.category?.id,
+        brandId: productData?.product.brand?.id,
+      });
     }
   }, [productData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (productId) {
+      const updateResp = await updateProduct({
+        variables: {
+          input: product,
+        },
+      });
+
+      if (updateResp?.data?.updateProduct) {
+        router.push("/panel/products");
+      }
+    } else {
+      const createResp = await createProduct({
+        variables: {
+          input: product,
+        },
+      });
+
+      if (createResp?.data?.createProduct) {
+        router.push("/panel/products");
+      }
+    }
   };
 
   return (
@@ -99,13 +154,14 @@ function ProductForm({ productId }: Props) {
         <select
           id="category"
           disabled={categoryLoading}
-          className={`border border-gray-500 p-2 rounded ${
+          className={`border p-2 rounded w-full disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
             categoryLoading ? "bg-gray-100 text-gray-400" : ""
           }`}
           value={product.categoryId}
-          onChange={(e) =>
-            setProduct({ ...product, categoryId: e.target.value })
-          }
+          onChange={(e) => {
+            setProduct({ ...product, categoryId: e.target.value });
+            category({ variables: { id: e.target.value } });
+          }}
         >
           <option value="">انتخاب کنید...</option>
           {categoryData?.categoryList?.map((cat: any) => (
@@ -127,25 +183,25 @@ function ProductForm({ productId }: Props) {
       </div>
 
       <div className="flex flex-col my-6">
-        <label htmlFor="category" className="mb-2 font-bold">
+        <label htmlFor="brand" className="mb-2 font-bold">
           برند
         </label>
 
         <select
           id="brand"
-          disabled={brandLoading}
-          className={`border border-gray-500 p-2 rounded ${
+          disabled={!product.categoryId || categorySingleLoading}
+          className={`border p-2 rounded w-full disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
             categoryLoading ? "bg-gray-100 text-gray-400" : ""
           }`}
           value={product.brandId}
-          onChange={(e) =>
-            setProduct({ ...product, brandId: e.target.value })
-          }
+          onChange={(e) => {
+            setProduct({ ...product, brandId: e.target.value });
+          }}
         >
           <option value="">انتخاب کنید...</option>
-          {brandData?.brandList?.map((cat: any) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
+          {categorySingleData?.category.brands?.map((brand: any) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.name}
             </option>
           ))}
         </select>
@@ -156,7 +212,7 @@ function ProductForm({ productId }: Props) {
 
         {categoryError && (
           <span className="text-red-500 text-sm mt-1">
-            خطا در بارگذاری دسته‌بندی‌ها
+            خطا در بارگذاری برند
           </span>
         )}
       </div>
@@ -166,15 +222,15 @@ function ProductForm({ productId }: Props) {
           عنوان فارسی محصول
         </label>
         <input
-          disabled={productLoading}
-          className={`border border-gray-500 p-2 rounded ${
+          disabled={!product.brandId || productLoading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
             productLoading ? "bg-gray-100 text-gray-400" : ""
           }`}
           type="text"
           id="name"
           value={product.title}
           onChange={(e) => setProduct({ ...product, title: e.target.value })}
-          placeholder="برند..."
+          placeholder="جویس بازوکا صورتی..."
           autoComplete="on"
         />
         {errors.title && (
@@ -187,15 +243,15 @@ function ProductForm({ productId }: Props) {
           عنوان انگلیسی (SEO)
         </label>
         <input
-          disabled={productLoading}
-          className={`border border-gray-500 p-2 rounded ${
+          disabled={!product.brandId || productLoading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
             productLoading ? "bg-gray-100 text-gray-400" : ""
           }`}
           type="text"
           id="slug"
           value={product.slug}
           onChange={(e) => setProduct({ ...product, slug: e.target.value })}
-          placeholder="برند..."
+          placeholder="bazooka-pink"
           autoComplete="on"
         />
         {errors.slug && (
@@ -204,12 +260,100 @@ function ProductForm({ productId }: Props) {
       </div>
 
       <div className="flex flex-col my-6">
+        <label htmlFor="price" className="mb-2 font-bold">
+          قیمت محصول (تومان)
+        </label>
+        <input
+          disabled={!product.brandId || productLoading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+            productLoading ? "bg-gray-100 text-gray-400" : ""
+          }`}
+          type="text"
+          id="price"
+          value={product.price}
+          onChange={(e) =>
+            setProduct({ ...product, price: Number(e.target.value) })
+          }
+          placeholder="قیمت: 54000"
+          autoComplete="on"
+        />
+      </div>
+
+      <div className="flex flex-col my-6">
+        <label htmlFor="discount" className="mb-2 font-bold">
+          تخفیف
+        </label>
+        <input
+          disabled={!product.brandId || productLoading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+            productLoading ? "bg-gray-100 text-gray-400" : ""
+          }`}
+          type="text"
+          id="discount"
+          value={product.discount}
+          onChange={(e) =>
+            setProduct({ ...product, discount: Number(e.target.value) })
+          }
+          placeholder="تحفیف: 10%"
+          autoComplete="on"
+        />
+      </div>
+
+      <div className="flex flex-col my-6">
+        <label htmlFor="quantity" className="mb-2 font-bold">
+          تعداد موجودی انبار
+        </label>
+        <input
+          disabled={!product.brandId || productLoading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+            productLoading ? "bg-gray-100 text-gray-400" : ""
+          }`}
+          type="text"
+          id="quantity"
+          value={product.quantity}
+          onChange={(e) =>
+            setProduct({ ...product, quantity: Number(e.target.value) })
+          }
+          placeholder="18"
+          autoComplete="on"
+        />
+      </div>
+
+      <div className="flex flex-col mb-4">
+        <label className="mb-2">آیا عمده‌فروش هستید؟</label>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            className={`px-4 py-2 rounded ${
+              product.is_pack
+                ? "bg-green-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+            onClick={() => setProduct({ ...product, is_pack: true })}
+          >
+            بله
+          </button>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded ${
+              !product.is_pack
+                ? "bg-red-600 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+            onClick={() => setProduct({ ...product, is_pack: false })}
+          >
+            خیر
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col my-6">
         <label htmlFor="description" className="mb-2 font-bold">
           توضیحات
         </label>
         <textarea
-          disabled={productLoading}
-          className={`border border-gray-500 p-2 rounded h-32 ${
+          disabled={!product.brandId || productLoading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed h-32 ${
             productLoading ? "bg-gray-100 text-gray-400" : ""
           }`}
           id="description"
@@ -232,8 +376,8 @@ function ProductForm({ productId }: Props) {
           آدرس یا لینک عکس‌ (به زودی نسخه جدید میاد)
         </label>
         <input
-          disabled={loading}
-          className={`border border-gray-500 p-2 rounded ${
+          disabled={!product.brandId || loading}
+          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
             loading ? "bg-gray-100 text-gray-400" : ""
           }`}
           type="text"
@@ -261,7 +405,6 @@ function ProductForm({ productId }: Props) {
       <div className="flex flex-col mt-8">
         <button
           type="submit"
-          disabled={productLoading}
           className={`py-2 px-8 text-white flex justify-center items-center gap-2 ${
             productLoading
               ? "bg-gray-500 cursor-not-allowed"

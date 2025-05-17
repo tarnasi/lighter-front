@@ -9,7 +9,7 @@ export default async function page({}: Props) {
     <>
       <Navbar />
       <PageTitle title="ایجاد محصول جدید" returnLink="/panel/products" />
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-16">
         <ProductForm />
       </div>
     </>
