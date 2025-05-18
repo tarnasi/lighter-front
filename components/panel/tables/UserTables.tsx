@@ -4,11 +4,11 @@ import { useQuery } from "@apollo/client";
 import { USER_LIST_QUERY } from "@/apollo/queries";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingSkeleton from "../LoadingSkeleton";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 import { FaTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
-import JalaliDateConverter from "../JalaliDateConverter";
+import JalaliDateConverter from "@/components/JalaliDateConverter";
 import Link from "next/link";
 
 const UserTable = () => {

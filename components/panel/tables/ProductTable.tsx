@@ -65,8 +65,13 @@ export default function ProductTable({}: Props) {
               <span>برند: {product.brand.name}</span>
             </div>
 
-            {/* عکس */}
+            {/* عکس با نشان is_pack */}
             <div className="relative w-full h-48 bg-gray-50">
+              {product.is_pack && (
+                <div className="absolute top-2 right-2 bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow z-10">
+                  باکس / عمده
+                </div>
+              )}
               {product.images?.[0] ? (
                 <Image
                   src={product.images[0]}

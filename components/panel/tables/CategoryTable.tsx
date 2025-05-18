@@ -3,13 +3,13 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { CATEGORY_LIST_QUERY } from "@/apollo/queries";
 import { useEffect } from "react";
-import LoadingSkeleton from "../LoadingSkeleton";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 import { FaTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import Link from "next/link";
 import { CATEGORY_DELETE_MUTATION } from "@/apollo/mutations";
-import EmptyBox from "../EmptyBox";
+import EmptyBox from "@/components/EmptyBox";
 import Image from "next/image";
 
 const CategoryTable = () => {
