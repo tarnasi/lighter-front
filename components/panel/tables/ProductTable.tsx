@@ -17,97 +17,123 @@ export default function ProductTable({}: Props) {
     data: productData,
     loading: productLoading,
     error: productError,
-    refetch: productRefetch
+    refetch: productRefetch,
   } = useQuery(PRODUCT_LIST_QUERY);
 
-  if (productLoading) {
-    <LoadingSkeleton />;
-  }
-
-  if (productError) {
-    return <p>{productError.message}</p>;
-  }
-
-  const [deleteProduct, {error: deleteError, loading: deleteLoading}] = useMutation(
+  const [deleteProduct, { error: deleteError }] = useMutation(
     PRODUCT_DELETE_MUTATION,
     {
-      fetchPolicy: 'network-only'
+      fetchPolicy: "network-only",
     }
-  )
+  );
 
-  const handleDeleteProduct = async (id:string) => {
-    try{
-      await deleteProduct({
-        variables: { id }
-      })
-      await productRefetch()
-    }
-    catch(err) {
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      await deleteProduct({ variables: { id } });
+      await productRefetch();
+    } catch (err) {
       console.log(deleteError?.message);
     }
-  }
+  };
+
+  if (productLoading) return <LoadingSkeleton />;
+  if (productError) return <p>{productError.message}</p>;
 
   return (
-    <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
-      {/* MOBILE */}
-      <div className="grid grid-cols-1 gap-4 py-4">
-        <Link
-          href="/panel/products/create"
-          className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
-        >
-          ایجاد محصول جدید
-        </Link>
-        {productData?.productList?.map((product: any) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+      <Link
+        href="/panel/products/create"
+        className="col-span-full text-center bg-green-100 text-green-700 border border-green-400 rounded p-2 hover:bg-green-200 transition"
+      >
+        ایجاد محصول جدید
+      </Link>
+
+      {productData?.productList?.map((product: any) => {
+        const hasDiscount = product.discount > 0;
+        const discountedPrice = hasDiscount
+          ? product.price - product.price * (product.discount / 100)
+          : product.price;
+
+        return (
           <div
             key={product.id}
-            className="border px-4 pb-1 pt-3 rounded text-sm border-gray-200"
+            className="bg-white rounded-xl border shadow-sm overflow-hidden flex flex-col"
           >
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col gap-1">
-                <p>
-                  <strong>دسته بندی (برند):</strong> {product.category.name} (
-                  {product.category.slug}) برند: {product.brand.name} ({product.brand.slug})
-                </p>
-                <p>
-                  <strong>عنوان:</strong> {product.title}
-                </p>
-                <p>
-                  <strong>نام انگلیسی (SEO):</strong> {product.slug}
-                </p>
-                <p>
-                  <strong>توضیحات:</strong> {product.description || "-"}
-                </p>
-              </div>
-              {typeof product.image === "string" && product.image.trim() !== "" ? (
+            {/* دسته بندی و برند */}
+            <div className="bg-gray-100 text-xs px-4 py-2 text-gray-700 flex justify-between">
+              <span>دسته: {product.category.name}</span>
+              <span>برند: {product.brand.name}</span>
+            </div>
+
+            {/* عکس */}
+            <div className="relative w-full h-48 bg-gray-50">
+              {product.images?.[0] ? (
                 <Image
-                  src={product.image}
-                  alt="عکس"
-                  width={48}
-                  height={48}
-                  className="object-cover rounded-md"
+                  src={product.images[0]}
+                  alt={product.title}
+                  layout="fill"
+                  objectFit="cover"
                 />
               ) : (
-                <span className="text-gray-500">ثبت نشده</span>
+                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                  بدون تصویر
+                </div>
               )}
             </div>
-            <div className="flex items-center justify-evenly mt-4 border-t-2 pt-6 pb-4">
+
+            {/* بدنه کارت */}
+            <div className="flex-1 p-4 text-sm flex flex-col justify-between gap-2">
+              <h3 className="font-bold text-base text-gray-800">
+                {product.title}
+              </h3>
+
+              {/* قیمت */}
+              <div className="text-sm">
+                {hasDiscount ? (
+                  <div className="flex items-center gap-2">
+                    <span className="line-through text-red-400">
+                      {product.price.toLocaleString()} تومان
+                    </span>
+                    <span className="text-green-600 font-bold">
+                      {discountedPrice.toLocaleString()} تومان
+                    </span>
+                    <span className="bg-red-100 text-red-600 px-1 rounded text-xs">
+                      ٪{product.discount}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="font-medium text-gray-700">
+                    {product.price.toLocaleString()} تومان
+                  </span>
+                )}
+              </div>
+
+              {/* موجودی */}
+              <div className="text-xs text-gray-600">
+                موجودی: {product.quantity}
+              </div>
+            </div>
+
+            {/* اکشن‌ها */}
+            <div className="flex border-t divide-x text-sm">
               <Link
                 href={`/panel/products/update/${product.id}`}
-                className="flex items-center justify-evenly gap-2 shadow px-8 p-2 text-blue-400 hover:text-blue-900 hover:cursor-pointer"
+                className="w-1/2 py-2 flex justify-center items-center text-blue-600 hover:bg-blue-50 transition"
               >
-                <FaEdit /> ویرایش
+                <FaEdit className="ml-1" />
+                ویرایش
               </Link>
               <button
-                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
                 onClick={() => handleDeleteProduct(product.id)}
+                className="w-1/2 py-2 flex justify-center items-center text-red-500 hover:bg-red-50 transition"
               >
-                <FaTrashCan />
+                <FaTrashCan className="ml-1" />
                 حذف
               </button>
             </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
