@@ -126,8 +126,8 @@ export const PRODUCT_LIST_QUERY = gql`
 `;
 
 export const PRODUCT_BY_ID_QUERY = gql`
-  query Product {
-    product {
+  query Product($id: ID!) {
+    product(id: $id) {
       id
       title
       slug

@@ -38,7 +38,8 @@ function BrandForm({ brandId }: Props) {
     loading: categoryLoading,
     error: categoryError,
   } = useQuery(CATEGORY_LIST_QUERY);
-  const [getCategory, { called, data, loading, error }] = useLazyQuery(
+
+  const [getBrand, { called, data, loading, error }] = useLazyQuery(
     BRAND_BY_ID_QUERY,
     {
       variables: { id: brandId },
@@ -61,7 +62,7 @@ function BrandForm({ brandId }: Props) {
 
   useEffect(() => {
     if (brandId && !called) {
-      getCategory();
+      getBrand();
     }
   }, [brandId, called]);
 
@@ -95,7 +96,6 @@ function BrandForm({ brandId }: Props) {
         })
 
         if (createResp?.data?.createBrand) {
-          console.log("createResp?.data?.createBrand: ", createResp?.data?.createBrand);
           router.push('/panel/brands')
         }
       }
@@ -115,7 +115,6 @@ function BrandForm({ brandId }: Props) {
         })
 
         if (updateResp?.data?.updateBrand) {
-          console.log("createResp?.data?.createBrand: ", updateResp?.data?.createBrand);
           router.push('/panel/brands')
         }
       }

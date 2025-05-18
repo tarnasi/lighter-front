@@ -60,6 +60,7 @@ function ProductForm({ productId }: Props) {
   ] = useLazyQuery(CATEGORY_BY_ID_QUERY, {
     fetchPolicy: "network-only",
   });
+
   const [
     getProduct,
     {
@@ -68,7 +69,11 @@ function ProductForm({ productId }: Props) {
       loading: productLoading,
       error: productError,
     },
-  ] = useLazyQuery(PRODUCT_BY_ID_QUERY);
+  ] = useLazyQuery(PRODUCT_BY_ID_QUERY, {
+    variables: { id: productId },
+    fetchPolicy: "network-only",
+  });
+
   const {
     data: categoryData,
     loading: categoryLoading,
@@ -84,26 +89,36 @@ function ProductForm({ productId }: Props) {
   ] = useMutation(PRODUCT_UPDATE_MUTATION);
 
   useEffect(() => {
-    if (!productId && !productCalled) {
-      getProduct({ variables: { id: productId } });
+    console.log("productId: ", productId);
+    if (productId && !productCalled) {
+      getProduct();
+
+      if (productData) {
+        console.log("PRODUCT OBJECT: ", productData);
+      }
     }
   }, [productId, productCalled]);
 
   useEffect(() => {
-    console.log("productData: ", productData);
-    if (productData) {
+    if (productData?.product) {
+      const p = productData.product;
       setProduct({
-        ...product,
-        title: productData?.product.title,
-        slug: productData?.product.slug,
-        description: productData?.product.description,
-        price: productData?.product.price,
-        discount: productData?.product.discount,
-        quantity: productData?.product.quantity,
-        is_pack: productData?.product.is_pack,
-        categoryId: productData?.product.category?.id,
-        brandId: productData?.product.brand?.id,
+        title: p.title,
+        slug: p.slug,
+        description: p.description,
+        price: p.price,
+        discount: p.discount,
+        quantity: p.quantity,
+        is_pack: p.is_pack,
+        categoryId: p.category?.id || "",
+        brandId: p.brand?.id || "",
+        images: p.images || [],
       });
+
+      // واکشی اطلاعات دسته‌بندی برای فعال‌سازی برند
+      if (p.category?.id) {
+        category({ variables: { id: p.category.id } });
+      }
     }
   }, [productData]);
 
@@ -112,7 +127,10 @@ function ProductForm({ productId }: Props) {
     if (productId) {
       const updateResp = await updateProduct({
         variables: {
-          input: product,
+          input: {
+            ...product,
+            id: productId
+          },
         },
       });
 
@@ -122,7 +140,18 @@ function ProductForm({ productId }: Props) {
     } else {
       const createResp = await createProduct({
         variables: {
-          input: product,
+          input: {
+            title: product.title,
+            slug: product.slug,
+            description: product.description,
+            price: product.price,
+            discount: product.discount,
+            quantity: product.quantity,
+            is_pack: product.is_pack,
+            categoryId: product.categoryId,
+            brandId: product.brandId,
+            images: []
+          },
         },
       });
 

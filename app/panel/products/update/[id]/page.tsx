@@ -4,7 +4,7 @@ import PageTitle from "@/components/PageTitle";
 
 type Props = {
   params: {
-    productId: string;
+    id: string;
   };
 };
 
@@ -14,7 +14,7 @@ export default async function page({ params }: Props) {
       <Navbar />
       <PageTitle title="ویرایش محصول" returnLink="/panel/products" />
       <div className="flex justify-center mb-16">
-        <ProductForm productId={params.productId} />
+        <ProductForm productId={params.id} />
       </div>
     </>
   );

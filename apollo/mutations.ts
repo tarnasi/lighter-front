@@ -151,8 +151,8 @@ export const PRODUCT_CREATE_MUTATION = gql`
 `;
 
 export const PRODUCT_UPDATE_MUTATION = gql`
-  mutation CreateProduct($input: CreateProductInput!) {
-    createProduct(input: $input) {
+  mutation UpdateProduct($input: UpdateProductInput!) {
+    updateProduct(input: $input) {
       id
       title
       slug
