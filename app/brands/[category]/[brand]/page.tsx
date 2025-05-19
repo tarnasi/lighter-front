@@ -1,25 +1,20 @@
-import React from "react";
+'use client'
+
 import PageTitle from "@/components/PageTitle";
 import Navbar from "@/components/Navbar";
 import Products from "@/components/Products";
+import { useParams } from 'next/navigation'
 
-type Props = {
-  params: {
-    category: string;
-    brand: string;
-  };
-};
+export default function ProductPage() {
 
-export default async function ProductPage({ params }: Props) {
-
-  const paramsObject = await params
+  const params = useParams<{ brand: string; category: string }>()
 
   return (
     <div>
       <Navbar />
       <PageTitle
-        title={`محصولات برند ${paramsObject.brand}`}
-        returnLink={`/brands/${paramsObject.category}`}
+        title={`محصولات برند ${params.brand}`}
+        returnLink={`/brands/${params.category}`}
       />
       <Products data={[]} />
     </div>

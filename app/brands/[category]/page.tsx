@@ -1,21 +1,18 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Brands from "@/components/Brands";
 import PageTitle from "@/components/PageTitle";
+import { useParams } from "next/navigation";
 
-type Props = {
-  params: {
-    category: string;
-  };
-};
-
-const BrandPage = async ({ params }: Props) => {
-  const paramsObject = await params;
+const BrandPage = async () => {
+  const params = useParams<{ category: string }>();
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <Navbar />
-      <PageTitle title={`برندهای ${paramsObject.category}`} returnLink="/" />
-      <Brands category={paramsObject.category} />
+      <PageTitle title={`برندهای ${params.category}`} returnLink="/" />
+      <Brands category={params.category} />
     </div>
   );
 };
