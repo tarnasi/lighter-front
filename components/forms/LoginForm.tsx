@@ -15,7 +15,7 @@ const LoginForm = () => {
   const [errors, setErrors] = useState<{ mobile?: string; password?: string }>(
     {}
   );
-  
+
   const setUser = useUserStore((state) => state.setUser)
 
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
@@ -171,7 +171,7 @@ const LoginForm = () => {
         <p className="text-center mt-4 text-sm">
           <Link
             className="text-sky-600 underline underline-offset-6"
-            href="/panel/reset-password"
+            href="/reset-password"
           >
             فراموشی رمز عبور
           </Link>
@@ -180,7 +180,7 @@ const LoginForm = () => {
           ثبت نام از طریق لینک روبرو{" "}
           <Link
             className="text-sky-600 underline underline-offset-6"
-            href="/panel/register"
+            href="/register"
           >
             اینجا
           </Link>
