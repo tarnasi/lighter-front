@@ -2,9 +2,7 @@ import CategoryForm from "@/components/forms/CategoryForm";
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
 
-type Props = {};
-
-const CreateCategoryPage = async (props: Props) => {
+const CreateCategoryPage = async () => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />

@@ -1,14 +1,13 @@
+"use client";
+
 import ProductForm from "@/components/forms/ProductForm";
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
+import { useParams } from "next/navigation";
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
+export default async function page() {
+  const params = useParams<{ id: string }>();
 
-export default async function page({ params }: Props) {
   return (
     <>
       <Navbar />

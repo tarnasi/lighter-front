@@ -1,22 +1,23 @@
+"use client";
+
 import BrandForm from "@/components/forms/BrandForm";
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
+import { useParams } from "next/navigation";
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-async function BarndPage({ params }: Props) {
-  const paramsObject = await params;
+function BarndPage() {
+  const params = useParams<{ id: string }>();
 
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
-      <PageTitle title="ویرایش برند" returnLink="/panel/brands" returnTitle="برگشت" />
+      <PageTitle
+        title="ویرایش برند"
+        returnLink="/panel/brands"
+        returnTitle="برگشت"
+      />
       <div className="flex justify-center">
-        <BrandForm brandId={paramsObject.id} />
+        <BrandForm brandId={params.id} />
       </div>
     </div>
   );

@@ -1,16 +1,12 @@
+'use client'
+
 import CategoryUpdateForm from "@/components/forms/CategoryUpdateForm";
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
+import { useParams } from "next/navigation";
 
-type Props = {
-  params: {
-    id: string
-  }
-};
-
-const CreateCategoryPage = async ({params}: Props) => {
-
-  const paramsObject = await params
+const CreateCategoryPage = async () => {
+  const params = useParams<{ id: string }>();
 
   return (
     <div className="bg-white min-h-screen">
@@ -21,7 +17,7 @@ const CreateCategoryPage = async ({params}: Props) => {
         returnTitle="برگشت به دسته بندی"
       />
       <div className="flex justify-center">
-        <CategoryUpdateForm categoryId={paramsObject.id} />
+        <CategoryUpdateForm categoryId={params.id} />
       </div>
     </div>
   );

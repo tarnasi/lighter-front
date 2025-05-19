@@ -3,7 +3,6 @@
 import { Calendar } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-import { useDaeStore } from "@/stores/dateStore";
 import DateObject from "react-date-object";
 
 type Props = {
@@ -12,7 +11,6 @@ type Props = {
 };
 
 export default function JalaliCalendarDate({ value, onChange }: Props) {
-
   return (
     <div className="flex flex-col gap-4 items-center justify-center p-4 border border-gray-300 rounded text-black">
       <Calendar
