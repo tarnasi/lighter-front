@@ -6,7 +6,7 @@ import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 
@@ -35,6 +35,10 @@ export default function ProductTable({}: Props) {
       console.log(deleteError?.message);
     }
   };
+
+  useEffect(() => {
+    productRefetch();
+  }, []);
 
   if (productLoading) return <LoadingSkeleton />;
   if (productError) return <p>{productError.message}</p>;
