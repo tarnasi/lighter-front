@@ -75,7 +75,7 @@ const CategoryTable = () => {
                     <span className="text-gray-500">ثبت نشده</span>
                   )}
                 </td>
-                <td className="p-2 flex items-center justify-center">
+                <td className="p-2 border border-gray-400 flex items-center justify-center">
                   <Image
                     src={
                       category.image || (
@@ -83,8 +83,8 @@ const CategoryTable = () => {
                       )
                     }
                     alt="عکس"
-                    width={48}
-                    height={48}
+                    width={32}
+                    height={32}
                     className="object-cover rounded-md"
                   />
                 </td>

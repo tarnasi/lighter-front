@@ -1,4 +1,4 @@
-import CategoryForm from "@/components/forms/CategoryForm";
+import CategoryUpdateForm from "@/components/forms/CategoryInputsForm";
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
 
@@ -12,7 +12,7 @@ const CreateCategoryPage = async () => {
         returnTitle="برگشت به دسته بندی"
       />
       <div className="flex justify-center">
-        <CategoryForm />
+        <CategoryUpdateForm />
       </div>
     </div>
   );

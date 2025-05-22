@@ -1,18 +1,25 @@
 "use client";
 
-import { CATEGORY_CREATE_MUTATION } from "@/apollo/mutations";
-import { useMutation } from "@apollo/client";
+import {
+  CATEGORY_CREATE_MUTATION,
+  CATEGORY_UPDATE_MUTATION,
+} from "@/apollo/mutations";
+import { CATEGORY_BY_ID_QUERY } from "@/apollo/queries";
+import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ImageUploader from "./inputs/ImageUploader";
 
-type Props = {};
+type Props = {
+  categoryId?: string;
+};
 
-const CategoryForm = (props: Props) => {
+const CategoryForm = ({ categoryId }: Props) => {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [description, setDesciption] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
   const [errors, setErrors] = useState<{
@@ -24,26 +31,41 @@ const CategoryForm = (props: Props) => {
 
   const router = useRouter();
 
-  // const setUser = useCategoryStore((state) => state.setUser);
-
-  const [createCategory, { loading, error }] = useMutation(
-    CATEGORY_CREATE_MUTATION,
+  const { data: categoryData, loading: categoryLoading } = useQuery(
+    CATEGORY_BY_ID_QUERY,
     {
+      variables: { id: categoryId },
+      skip: !categoryId,
       fetchPolicy: "network-only",
     }
   );
 
+  const [createCategory, createState] = useMutation(CATEGORY_CREATE_MUTATION, {
+    fetchPolicy: "network-only",
+  });
+
+  const [updateCategory, updateState] = useMutation(CATEGORY_UPDATE_MUTATION, {
+    fetchPolicy: "network-only",
+  });
+
+  const loading = createState.loading || updateState.loading;
+  const error = createState.error || updateState.error;
+
+  useEffect(() => {
+    if (categoryData?.category) {
+      setName(categoryData.category.name);
+      setSlug(categoryData.category.slug);
+      setDescription(categoryData.category.description || "");
+      setImage(categoryData.category.image || "");
+    }
+  }, [categoryData]);
+
   const validate = () => {
     const newErrors: typeof errors = {};
-
     if (!name) newErrors.name = "نام دسته‌بندی الزامی است.";
     if (!slug) newErrors.slug = "اسلاگ الزامی است.";
     else if (!/^[a-z0-9-]+$/.test(slug))
       newErrors.slug = "اسلاگ فقط باید شامل حروف کوچک، عدد و خط تیره باشد.";
-
-    // else if (!/^https?:\/\/.+/.test(image))
-    //   newErrors.image = "فرمت لینک عکس معتبر نیست.";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -53,26 +75,24 @@ const CategoryForm = (props: Props) => {
     if (!validate()) return;
 
     try {
-      const res = await createCategory({
-        variables: {
-          input: {
-            name,
-            slug,
-            description,
-            image,
-          },
+      const mutation = categoryId ? updateCategory : createCategory;
+      const variables = {
+        input: {
+          ...(categoryId && { id: categoryId }),
+          name,
+          slug,
+          description,
+          image,
         },
-      });
+      };
 
-      if (res?.data?.createCategory) {
-        setName("");
-        setSlug("");
-        setDesciption("");
-        setImage("");
+      const res = await mutation({ variables });
+
+      if (res?.data?.createCategory || res?.data?.updateCategory) {
         router.push("/panel/categories");
       }
-    } catch (err: any) {
-      console.error("creatory error:", err);
+    } catch (err) {
+      console.error("submit error:", err);
     }
   };
 
@@ -104,7 +124,6 @@ const CategoryForm = (props: Props) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="دسته بندی..."
-          autoComplete="on"
         />
         {errors.name && (
           <span className="text-red-500 text-sm mt-1">{errors.name}</span>
@@ -124,8 +143,7 @@ const CategoryForm = (props: Props) => {
           id="slug"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
-          placeholder="دسته بندی..."
-          autoComplete="on"
+          placeholder="slug-name"
         />
         {errors.slug && (
           <span className="text-red-500 text-sm mt-1">{errors.slug}</span>
@@ -143,9 +161,8 @@ const CategoryForm = (props: Props) => {
           }`}
           id="description"
           value={description}
-          onChange={(e) => setDesciption(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
           placeholder="توضیحات..."
-          autoComplete="on"
         />
         {errors.description && (
           <span className="text-red-500 text-sm mt-1">
@@ -156,29 +173,9 @@ const CategoryForm = (props: Props) => {
 
       <div className="flex flex-col my-6">
         <label htmlFor="image" className="mb-2">
-          آدرس یا لینک عکس‌ (به زودی نسخه جدید میاد)
+          آپلود عکس دسته بندی
         </label>
-        <input
-          disabled={loading}
-          className={`border border-gray-500 p-2 rounded ${
-            loading ? "bg-gray-100 text-gray-400" : ""
-          }`}
-          type="text"
-          id="image"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="لینک..."
-          autoComplete="on"
-        />
-        {image && /^https?:\/\/.+/.test(image) && (
-          <div className="mt-4">
-            <img
-              src={image}
-              alt="Preview"
-              className="max-w-full h-32 object-contain border rounded"
-            />
-          </div>
-        )}
+        <ImageUploader setImage={setImage} initialImage={image} />
         {errors.image && (
           <span className="text-red-500 text-sm mt-1">{errors.image}</span>
         )}
@@ -215,10 +212,12 @@ const CategoryForm = (props: Props) => {
                   d="M4 12a8 8 0 018-8v8H4z"
                 />
               </svg>
-              <span>در حال ساخت...</span>
+              <span>در حال ذخیره...</span>
             </>
+          ) : categoryId ? (
+            "ویرایش دسته‌بندی"
           ) : (
-            "ساخت"
+            "ساخت دسته‌بندی"
           )}
         </button>
         {error && (

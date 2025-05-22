@@ -1,6 +1,6 @@
 'use client'
 
-import CategoryUpdateForm from "@/components/forms/CategoryUpdateForm";
+import CategoryUpdateForm from "@/components/forms/CategoryInputsForm";
 import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
 import { useParams } from "next/navigation";
