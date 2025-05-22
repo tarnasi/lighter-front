@@ -27,14 +27,14 @@ const ImageUploader = ({ setImage, initialImage }: Props) => {
     try {
       setUploading(true);
       const response = await axios.post(
-        "http://localhost:4000/upload",
+        "https://lighterapi.devdiaries.work/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
 
-      const imageUrl = `http://localhost:4000${response.data.url}`;
+      const imageUrl = `https://lighterapi.devdiaries.work${response.data.url}`;
       setImage(imageUrl);
       setPreview(imageUrl);
     } catch (error) {
@@ -64,7 +64,7 @@ const ImageUploader = ({ setImage, initialImage }: Props) => {
     const filename = parts[parts.length - 1];
 
     try {
-      const res = await fetch("http://localhost:4000/upload/delete", {
+      const res = await fetch("https://lighterapi.devdiaries.work/upload/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
