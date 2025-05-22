@@ -10,13 +10,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import ImageUploader from "./inputs/ImageUploader";
 
 type Props = {
   brandId?: string;
 };
 
 function BrandForm({ brandId }: Props) {
-
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
@@ -79,8 +79,7 @@ function BrandForm({ brandId }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try{
-
+    try {
       if (!brandId) {
         // DO CREATE
         const createResp = await createBrand({
@@ -90,16 +89,15 @@ function BrandForm({ brandId }: Props) {
               slug,
               description,
               image,
-              categoryId: category
-            }
-          }
-        })
+              categoryId: category,
+            },
+          },
+        });
 
         if (createResp?.data?.createBrand) {
-          router.push('/panel/brands')
+          router.push("/panel/brands");
         }
-      }
-      else {
+      } else {
         // DO CREATE
         const updateResp = await updateBrand({
           variables: {
@@ -109,17 +107,16 @@ function BrandForm({ brandId }: Props) {
               slug,
               description,
               image,
-              categoryId: category
-            }
-          }
-        })
+              categoryId: category,
+            },
+          },
+        });
 
         if (updateResp?.data?.updateBrand) {
-          router.push('/panel/brands')
+          router.push("/panel/brands");
         }
       }
-
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -237,30 +234,9 @@ function BrandForm({ brandId }: Props) {
 
       <div className="flex flex-col my-6">
         <label htmlFor="image" className="mb-2">
-          آدرس یا لینک عکس‌ (به زودی نسخه جدید میاد)
+          آپلود تصویر برند
         </label>
-        <input
-          disabled={loading}
-          className={`border border-gray-500 p-2 rounded ${
-            loading ? "bg-gray-100 text-gray-400" : ""
-          }`}
-          type="text"
-          id="image"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="لینک..."
-          autoComplete="on"
-          dir="ltr"
-        />
-        {image && /^https?:\/\/.+/.test(image) && (
-          <div className="mt-4">
-            <img
-              src={image}
-              alt="Preview"
-              className="max-w-full h-32 object-contain border rounded"
-            />
-          </div>
-        )}
+        <ImageUploader setImage={setImage} initialImage={image} />
         {errors.image && (
           <span className="text-red-500 text-sm mt-1">{errors.image}</span>
         )}
@@ -299,8 +275,10 @@ function BrandForm({ brandId }: Props) {
               </svg>
               <span>در حال ساخت...</span>
             </>
+          ) : brandId ? (
+            "ویرایش"
           ) : (
-            brandId ? "ویرایش" : "ایجاد"
+            "ایجاد"
           )}
         </button>
         {error && (

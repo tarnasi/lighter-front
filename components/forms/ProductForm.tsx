@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import GroupImageUploader from "./inputs/GroupImageUploader";
 
 type Props = {
   productId?: string;
@@ -129,7 +130,7 @@ function ProductForm({ productId }: Props) {
         variables: {
           input: {
             ...product,
-            id: productId
+            id: productId,
           },
         },
       });
@@ -150,7 +151,7 @@ function ProductForm({ productId }: Props) {
             is_pack: product.is_pack,
             categoryId: product.categoryId,
             brandId: product.brandId,
-            images: []
+            images: product.images,
           },
         },
       });
@@ -400,36 +401,15 @@ function ProductForm({ productId }: Props) {
         )}
       </div>
 
-      {/* <div className="flex flex-col my-6">
-        <label htmlFor="image" className="mb-2 font-bold">
-          آدرس یا لینک عکس‌ (به زودی نسخه جدید میاد)
+      <div className="flex flex-col my-6">
+        <label htmlFor="image" className="mb-2">
+          آپلود تصویر برند
         </label>
-        <input
-          disabled={!product.brandId || loading}
-          className={`border border-gray-500 p-2 rounded disabled:text-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed ${
-            loading ? "bg-gray-100 text-gray-400" : ""
-          }`}
-          type="text"
-          id="image"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="لینک..."
-          autoComplete="on"
-          dir="ltr"
+        <GroupImageUploader
+          images={product.images || []} // <-- fallback to empty array if undefined
+          setImages={(imgs) => setProduct({ ...product, images: imgs })}
         />
-        {image && /^https?:\/\/.+/.test(image) && (
-          <div className="mt-4">
-            <img
-              src={image}
-              alt="Preview"
-              className="max-w-full h-32 object-contain border rounded"
-            />
-          </div>
-        )}
-        {errors.image && (
-          <span className="text-red-500 text-sm mt-1">{errors.image}</span>
-        )}
-      </div> */}
+      </div>
 
       <div className="flex flex-col mt-8">
         <button
