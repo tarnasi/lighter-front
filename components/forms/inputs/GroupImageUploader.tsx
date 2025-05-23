@@ -111,7 +111,7 @@ const GroupImageUploader = ({ images, setImages }: Props) => {
               <button
                 type="button"
                 onClick={() => deleteImage(url)}
-                className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700 shadow hidden group-hover:block"
+                className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700 shadow block sm:group-hover:block z-10"
               >
                 حذف
               </button>
