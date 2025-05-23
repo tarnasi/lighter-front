@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/nextjs-registry": "^1.0.2",
     "@apollo/client": "^3.13.8",
     "@types/js-cookie": "^3.0.6",
     "@types/moment-jalaali": "^0.7.9",
+    "antd": "^5.25.2",
     "axios": "^1.9.0",
     "dayjs": "^1.11.13",
     "graphql": "^16.11.0",

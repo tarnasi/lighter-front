@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  },
+
   images: {
     remotePatterns: [
       {
@@ -23,7 +27,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: [
     "192.168.70.25",
     "10.200.253.66",
-    "lighterapi.devdiaries.work"
+    "lighterapi.devdiaries.work",
   ],
 };
 

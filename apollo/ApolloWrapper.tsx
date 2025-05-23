@@ -19,12 +19,9 @@ export default function ApolloWrapper({
 
   useEffect(() => {
     const token = Cookies.get("accessToken");
-    console.log("accessToken (client): ", token);
-
+    console.log("BASE URL: ", process.env.NEXT_PUBLIC_API_URL);
     const httpLink = createHttpLink({
-      // uri: "http://192.168.70.25:4000/graphql",
-      // uri: "http://10.200.253.66:4000/graphql",
-      uri: "https://lighterapi.devdiaries.work/graphql",
+      uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
     });
 
     const authLink = setContext((_, { headers }) => ({

@@ -16,7 +16,7 @@ const ImageUploader = ({ setImage, initialImage }: Props) => {
   useEffect(() => {
     if (initialImage) {
       setPreview(initialImage);
-      setImage(initialImage); // optional, keeps parent in sync
+      setImage(initialImage);
     }
   }, [initialImage]);
 
@@ -27,14 +27,14 @@ const ImageUploader = ({ setImage, initialImage }: Props) => {
     try {
       setUploading(true);
       const response = await axios.post(
-        "https://lighterapi.devdiaries.work/upload",
+        `${process.env.NEXT_PUBLIC_API_URL}/upload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
 
-      const imageUrl = `https://lighterapi.devdiaries.work${response.data.url}`;
+      const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}${response.data.url}`;
       setImage(imageUrl);
       setPreview(imageUrl);
     } catch (error) {
@@ -64,7 +64,7 @@ const ImageUploader = ({ setImage, initialImage }: Props) => {
     const filename = parts[parts.length - 1];
 
     try {
-      const res = await fetch("https://lighterapi.devdiaries.work/upload/delete", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload/delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

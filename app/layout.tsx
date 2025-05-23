@@ -5,6 +5,8 @@ import ApolloWrapper from "@/apollo/ApolloWrapper";
 import moment from "moment-jalaali";
 import "moment/locale/fa";
 
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+
 moment.locale("fa");
 moment.loadPersian({ dialect: "persian-modern" });
 
@@ -21,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <body className="antialiased">
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <ApolloWrapper>
+          <AntdRegistry>{children}</AntdRegistry>
+        </ApolloWrapper>
       </body>
     </html>
   );
