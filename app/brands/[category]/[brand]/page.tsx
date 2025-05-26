@@ -16,7 +16,7 @@ export default function ProductPage() {
         title={`محصولات برند ${params.brand}`}
         returnLink={`/brands/${params.category}`}
       />
-      <Products data={[]} />
+      {/* <Products data={[]} /> */}
     </div>
   );
 }
