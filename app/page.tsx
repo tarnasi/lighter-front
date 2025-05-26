@@ -1,14 +1,16 @@
+import Categories from "@/components/Categories";
 import Navbar from "@/components/Navbar";
 
-import Categories from "@/components/Categories";
 import PageTitle from "@/components/PageTitle";
+import Products from "@/components/Products";
 
 export default async function Home() {
   return (
     <>
       <Navbar />
-      <PageTitle title="دسته بندی محصولات" />
       <Categories />
+      {/* <PageTitle title="محصولات" /> */}
+      <Products />
     </>
   );
 }

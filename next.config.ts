@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         hostname: "lighterapi.devdiaries.work",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "http",
+        hostname: "192.168.70.25",
+        pathname: "/uploads/**",
+      },
     ],
   },
 

@@ -1,54 +1,109 @@
-'use client'
+"use client";
 
-import EmptyBox from '@/components/EmptyBox'
+import { PRODUCT_LIST_QUERY } from "@/apollo/queries";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { useQuery } from "@apollo/client";
+import Image from "next/image";
+import React, { useEffect } from "react";
 
-type ProductObject = {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  category: string;
-};
+type Props = {};
 
-type Props = {
-  data?: ProductObject[];
-};
+export default function Products({}: Props) {
+  const {
+    data: productData,
+    loading: productLoading,
+    error: productError,
+    refetch: productRefetch,
+  } = useQuery(PRODUCT_LIST_QUERY);
 
-const Products = ({ data = [] }: Props) => {
-  if (data.length === 0) {
-    return <EmptyBox />;
-  }
+  useEffect(() => {
+    productRefetch();
+  }, []);
+
+  if (productLoading) return <LoadingSkeleton />;
+  if (productError) return <p>{productError.message}</p>;
 
   return (
-    <div className="min-h-screen bg-white py-8 px-4">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
-        Available Products
-      </h2>
-      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {data.map((product) => (
-          <div
-            key={product.id}
-            className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-          >
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {product.name}
-              </h3>
-              <p className="text-sm text-gray-500">{product.category}</p>
-              <p className="text-indigo-600 font-bold mt-2">
-                ${product.price.toFixed(2)}
-              </p>
+    <div className="px-4 md:px-16 lg:px-32 xl:px-64 text-gray-800">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {productData?.productList?.map((product: any) => {
+          const hasDiscount = product.discount > 0;
+          const discountedPrice = hasDiscount
+            ? product.price - product.price * (product.discount / 100)
+            : product.price;
+
+          return (
+            <div
+              key={product.id}
+              className="bg-white rounded-xl border shadow-sm overflow-hidden flex flex-col"
+            >
+              {/* دسته بندی و برند */}
+              <div className="bg-gray-100 text-xs px-4 py-2 text-gray-700 flex justify-between">
+                <span>دسته: {product.category.name}</span>
+                <span>برند: {product.brand.name}</span>
+              </div>
+
+              {/* عکس با نشان is_pack */}
+              <div className="relative w-full h-48 bg-gray-50">
+                {product.is_pack && (
+                  <div className="absolute top-2 right-2 bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow z-10">
+                    باکس / عمده
+                  </div>
+                )}
+                {product.images?.[0] ? (
+                  <Image
+                    src={product.images[0]}
+                    alt={product.title}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    بدون تصویر
+                  </div>
+                )}
+              </div>
+
+              {/* بدنه کارت */}
+              <div className="flex-1 p-4 text-sm flex flex-col justify-between gap-2">
+                <h3 className="font-bold text-base text-gray-800">
+                  {product.title}
+                </h3>
+
+                {/* قیمت */}
+                <div className="text-sm">
+                  {hasDiscount ? (
+                    <div className="flex items-center gap-2">
+                      <span className="line-through text-red-400">
+                        {product.price.toLocaleString()} تومان
+                      </span>
+                      <span className="text-green-600 font-bold">
+                        {discountedPrice.toLocaleString()} تومان
+                      </span>
+                      <span className="bg-red-100 text-red-600 px-1 rounded text-xs">
+                        ٪{product.discount}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="font-medium text-gray-700">
+                      {product.price.toLocaleString()} تومان
+                    </span>
+                  )}
+                </div>
+
+                {/* موجودی */}
+                <div className="text-xs text-gray-600">
+                  {
+                    Number(product.quantity) > 0
+                    ? `موجودی: ${product.quantity}`
+                    : <span className="text-red-600 underline underline-offset-4">اتمام موجودی</span>
+                  }
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
-};
-
-export default Products;
+}

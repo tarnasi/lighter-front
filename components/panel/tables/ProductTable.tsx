@@ -120,7 +120,11 @@ export default function ProductTable({}: Props) {
 
                 {/* موجودی */}
                 <div className="text-xs text-gray-600">
-                  موجودی: {product.quantity}
+                  {Number(product.quantity) > 0 ? (
+                    `موجودی: ${product.quantity}`
+                  ) : (
+                    <span className="text-red-600 underline underline-offset-4">اتمام موجودی</span>
+                  )}
                 </div>
               </div>
 

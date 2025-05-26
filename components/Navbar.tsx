@@ -44,10 +44,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
+    <nav className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 border-b border-gray-200">
       <div className="flex items-center justify-between h-14">
         <Link href="/" className="flex justify-center items-center gap-2">
-          <Image src="/logo/logo-3.png" alt="logo" width={32} height={32} />
+          <Image src="/logo/logo-3.png" alt="logo" width={48} height={48} />
           <div className="text-sm md:text-lg tracking-wide font-bold">
             {logo_name}
           </div>
