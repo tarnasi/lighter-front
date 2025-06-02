@@ -156,3 +156,16 @@ export const PRODUCT_BY_ID_QUERY = gql`
     }
   }
 `;
+
+export const BASKET_QUERY = gql`
+  query Basket {
+    basket {
+      id
+      user_no
+      is_login
+      products: []
+    }
+  }
+`;
+
+export const REMOVE_FROM_BASKET_MUTATION = gql``;
