@@ -2,6 +2,7 @@
 
 import { PRODUCT_LIST_QUERY } from "@/apollo/queries";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { useCategoryStore } from "@/stores/categoryStore";
 import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import React, { useEffect } from "react";
@@ -9,16 +10,24 @@ import React, { useEffect } from "react";
 type Props = {};
 
 export default function Products({}: Props) {
+  const selectedCategory = useCategoryStore((state) => state.selectedCategory);
+
   const {
     data: productData,
     loading: productLoading,
     error: productError,
     refetch: productRefetch,
-  } = useQuery(PRODUCT_LIST_QUERY);
+  } = useQuery(PRODUCT_LIST_QUERY, {
+    variables: {
+      categoryId: selectedCategory == "all" ? null : selectedCategory,
+    },
+  });
 
   useEffect(() => {
-    productRefetch();
-  }, []);
+    productRefetch({
+      categoryId: selectedCategory === "all" ? null : selectedCategory,
+    });
+  }, [selectedCategory]);
 
   if (productLoading) return <LoadingSkeleton />;
   if (productError) return <p>{productError.message}</p>;
@@ -93,11 +102,13 @@ export default function Products({}: Props) {
 
                 {/* موجودی */}
                 <div className="text-xs text-gray-600">
-                  {
-                    Number(product.quantity) > 0
-                    ? `موجودی: ${product.quantity}`
-                    : <span className="text-red-600 underline underline-offset-4">اتمام موجودی</span>
-                  }
+                  {Number(product.quantity) > 0 ? (
+                    `موجودی: ${product.quantity}`
+                  ) : (
+                    <span className="text-red-600 underline underline-offset-4">
+                      اتمام موجودی
+                    </span>
+                  )}
                 </div>
               </div>
             </div>

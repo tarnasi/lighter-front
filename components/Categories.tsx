@@ -8,12 +8,13 @@ import EmptyBox from "./EmptyBox";
 import LoadingSkeleton from "./LoadingSkeleton";
 import Image from "next/image";
 
-type Props = {
-  onSelectCategory?: (slug: string) => void;
-};
+import { useCategoryStore } from "@/stores/categoryStore";
 
-const Categories = ({ onSelectCategory }: Props) => {
+const Categories = () => {
   const { data, loading, error, refetch } = useQuery(CATEGORY_LIST_QUERY);
+  const setSelectedCategory = useCategoryStore(
+    (state) => state.setSelectedCategory
+  );
 
   useEffect(() => {
     refetch();
@@ -35,7 +36,9 @@ const Categories = ({ onSelectCategory }: Props) => {
         {categories.map((cat: any) => (
           <button
             key={cat.id}
-            onClick={() => onSelectCategory?.(cat.slug)}
+            onClick={() =>
+              setSelectedCategory(cat.slug === "all" ? null : cat.id)
+            }
             className="flex-shrink-0 flex flex-col items-center text-sm hover:text-blue-600 hover:cursor-pointer focus:outline-none"
           >
             <div className="w-16 h-16 relative">

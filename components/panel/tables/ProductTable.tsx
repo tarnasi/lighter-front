@@ -2,6 +2,7 @@
 
 import { PRODUCT_DELETE_MUTATION } from "@/apollo/mutations";
 import { PRODUCT_LIST_QUERY } from "@/apollo/queries";
+import ProductSearchForm from "@/components/forms/ProductSearchForm";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
@@ -40,19 +41,25 @@ export default function ProductTable({}: Props) {
     productRefetch();
   }, []);
 
+  const onFilter = () => {
+    console.log("filter");
+  };
+
   if (productLoading) return <LoadingSkeleton />;
   if (productError) return <p>{productError.message}</p>;
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 text-gray-800">
+      <div className="flex flex-col gap-4 my-4">
+        <ProductSearchForm categories={[]} brands={[]} onFilter={onFilter} />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         <Link
           href="/panel/products/create"
-          className="col-span-full w-2/3 sm:2/3 md:1/3 lg:1/3 text-center bg-green-100 text-green-700 border border-green-400 rounded p-2 hover:bg-green-200 transition"
+          className="col-span-full w-2/3 sm:w-1/3 text-center bg-sky-100 text-sky-700 border border-sky-300 rounded p-2 hover:bg-sky-200 transition"
         >
           ایجاد محصول جدید
         </Link>
-
         {productData?.productList?.map((product: any) => {
           const hasDiscount = product.discount > 0;
           const discountedPrice = hasDiscount
@@ -123,7 +130,9 @@ export default function ProductTable({}: Props) {
                   {Number(product.quantity) > 0 ? (
                     `موجودی: ${product.quantity}`
                   ) : (
-                    <span className="text-red-600 underline underline-offset-4">اتمام موجودی</span>
+                    <span className="text-red-600 underline underline-offset-4">
+                      اتمام موجودی
+                    </span>
                   )}
                 </div>
               </div>
