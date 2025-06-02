@@ -94,8 +94,8 @@ export const BRAND_BY_ID_QUERY = gql`
 `;
 
 export const PRODUCT_LIST_QUERY = gql`
-  query ProductList($categoryId: ID) {
-    productList(categoryId: $categoryId) {
+  query ProductList($categoryId: ID, $brandId: ID) {
+    productList(categoryId: $categoryId, brandId: $brandId) {
       id
       title
       slug
