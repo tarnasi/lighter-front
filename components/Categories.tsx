@@ -23,12 +23,14 @@ const Categories = () => {
   if (loading) return <LoadingSkeleton />;
   if (error || !data) return <EmptyBox />;
 
-  const categoryList = data.categoryList || [];
-  const allCategory = categoryList.find((cat: any) => cat.slug === "all");
-  const otherCategories = categoryList.filter((cat: any) => cat.slug !== "all");
-  const categories = allCategory
-    ? [allCategory, ...otherCategories]
-    : otherCategories;
+  const manualAllCategory = {
+    id: "all",
+    name: "محصولات",
+    slug: "all",
+    image: `${process.env.NEXT_PUBLIC_API_URL}/uploads/default/boxes.png`, // replace with your actual fallback image path
+  };
+
+  const categories = [manualAllCategory, ...data.categoryList];
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
