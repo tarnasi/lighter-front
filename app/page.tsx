@@ -7,6 +7,9 @@ export default async function Home() {
     <>
       <Navbar />
       <Categories />
+      {/* Slider Card */}
+      {/* Main Product like a big card with 4 card bottom of it like two and two */}
+      {/* Slider for product */}
       <Products />
     </>
   );

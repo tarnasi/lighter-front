@@ -6,11 +6,12 @@ import { useCategoryStore } from "@/stores/categoryStore";
 import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { BsCaretLeftFill } from "react-icons/bs";
 
 type Props = {};
 
 export default function Products({}: Props) {
-  const [numberOfProduct, setNumberOfProduct] = useState(0)
+  const [numberOfProduct, setNumberOfProduct] = useState(0);
   const selectedCategory = useCategoryStore((state) => state.selectedCategory);
 
   const {
@@ -31,22 +32,22 @@ export default function Products({}: Props) {
   }, [selectedCategory]);
 
   const addToProduct = () => {
-    setNumberOfProduct(numberOfProduct + 1)
-  }
+    setNumberOfProduct(numberOfProduct + 1);
+  };
 
   const removeToProduct = () => {
     if (numberOfProduct <= 0) {
-      return
+      return;
     }
-    setNumberOfProduct(numberOfProduct - 1)
-  }
+    setNumberOfProduct(numberOfProduct - 1);
+  };
 
   if (productLoading) return <LoadingSkeleton />;
   if (productError) return <p>{productError.message}</p>;
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 text-gray-800">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+      <div className="flex overflow-x-auto gap-4 py-4 px-2">
         {productData?.productList?.map((product: any) => {
           const hasDiscount = product.discount > 0;
           const discountedPrice = hasDiscount
@@ -56,16 +57,10 @@ export default function Products({}: Props) {
           return (
             <div
               key={product.id}
-              className="bg-white rounded-xl border shadow-sm overflow-hidden flex flex-col"
+              className="bg-white scroll-smooth rounded-xl border shadow-sm hover:cursor-pointer hover:shadow-lg overflow-hidden flex-shrink-0 flex flex-col w-55"
             >
-              {/* دسته بندی و برند */}
-              <div className="bg-gray-100 text-xs px-4 py-2 text-gray-700 flex justify-between">
-                <span>دسته: {product.category.name}</span>
-                <span>برند: {product.brand.name}</span>
-              </div>
-
               {/* عکس با نشان is_pack */}
-              <div className="relative w-full h-48 bg-gray-50">
+              <div className="relative w-full h-40 bg-gray-50">
                 {product.is_pack && (
                   <div className="absolute top-2 right-2 bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow z-10">
                     باکس / عمده
@@ -85,6 +80,13 @@ export default function Products({}: Props) {
                 )}
               </div>
 
+              {/* دسته بندی و برند */}
+              <div className="bg-gray-100 text-xs px-4 py-1 text-gray-700 flex justify-start gap-1 items-center">
+                <span>{product.category.name}</span>
+                <span><BsCaretLeftFill /></span>
+                <span>{product.brand.name}</span>
+              </div>
+
               {/* بدنه کارت */}
               <div className="flex-1 p-4 flex flex-col justify-between gap-3">
                 <h3 className="font-bold text-base text-gray-800">
@@ -99,7 +101,9 @@ export default function Products({}: Props) {
                         {discountedPrice.toLocaleString()} تومان
                       </span>
                       <span className="text-sm sm:text-base text-gray-400 flex gap-1">
-                        <span className="line-through">{product.price.toLocaleString()}</span>
+                        <span className="line-through">
+                          {product.price.toLocaleString()}
+                        </span>
                         <span className="bg-red-100 text-red-600 px-1 rounded text-sm">
                           ٪{product.discount}
                         </span>
