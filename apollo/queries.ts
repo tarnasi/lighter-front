@@ -158,14 +158,65 @@ export const PRODUCT_BY_ID_QUERY = gql`
 `;
 
 export const BASKET_QUERY = gql`
-  query Basket {
-    basket {
+  query Product($id: ID!) {
+    product(id: $id) {
       id
-      user_no
-      is_login
-      products: []
+      title
+      slug
+      images
+      description
+      price
+      discount
+      quantity
+      is_pack
+      created_at
+      updated_at
+      category {
+        id
+        name
+        slug
+        description
+        image
+      }
+      brand {
+        id
+        name
+        slug
+        description
+        image
+      }
     }
   }
 `;
 
-export const REMOVE_FROM_BASKET_MUTATION = gql``;
+export const REMOVE_FROM_BASKET_MUTATION = gql`
+  query Product($id: ID!) {
+    product(id: $id) {
+      id
+      title
+      slug
+      images
+      description
+      price
+      discount
+      quantity
+      is_pack
+      created_at
+      updated_at
+      category {
+        id
+        name
+        slug
+        description
+        image
+      }
+      brand {
+        id
+        name
+        slug
+        description
+        image
+      }
+    }
+  }
+`;

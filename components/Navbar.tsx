@@ -11,7 +11,12 @@ import { ME_QUERY } from "@/apollo/queries";
 
 const logo_name = "فروشگاه";
 
-export default function Navbar() {
+type props = {
+  isPanel: boolean
+}
+
+
+export default function Navbar({isPanel}: props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
@@ -44,7 +49,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 border-b border-gray-200">
+    <nav className='px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 border-b border-gray-200'>
       <div className="flex items-center justify-between h-14">
         <Link href="/" className="flex justify-center items-center gap-2">
           <Image src="/logo/logo-3.png" alt="logo" width={48} height={48} />

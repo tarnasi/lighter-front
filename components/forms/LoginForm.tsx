@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "@/apollo/mutations";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import { useUserStore } from "@/stores/userStore";
 
 const LoginForm = () => {
