@@ -12,17 +12,16 @@ import { ME_QUERY } from "@/apollo/queries";
 const logo_name = "فروشگاه";
 
 type props = {
-  isUserPanel: boolean
-}
+  isUserPanel?: boolean;
+};
 
-
-export default function Navbar({isUserPanel}: props) {
+export default function Navbar({ isUserPanel = false }: props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
 
   const [getMe, { called, data, loading }] = useLazyQuery(ME_QUERY, {
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
   });
 
   useEffect(() => {
@@ -39,7 +38,7 @@ export default function Navbar({isUserPanel}: props) {
     if (data?.me) {
       setUser(data.me);
     }
-  }, [data, setUser])
+  }, [data, setUser]);
 
   const handleLogout = () => {
     Cookies.remove("accessToken");
@@ -49,7 +48,7 @@ export default function Navbar({isUserPanel}: props) {
   };
 
   return (
-    <nav className='px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 border-b border-gray-200'>
+    <nav className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 border-b border-gray-200">
       <div className="flex items-center justify-between h-14">
         <Link href="/" className="flex justify-center items-center gap-2">
           <Image src="/logo/logo-3.png" alt="logo" width={48} height={48} />
@@ -59,7 +58,10 @@ export default function Navbar({isUserPanel}: props) {
         </Link>
 
         <div className="flex items-center justify-center gap-3 text-xs md:text-lg">
-          <Link href="/" className="text-teal-600 hover:text-teal-900 text-sm md:text-base">
+          <Link
+            href="/"
+            className="text-teal-600 hover:text-teal-900 text-sm md:text-base"
+          >
             خانه
           </Link>
 
@@ -71,13 +73,19 @@ export default function Navbar({isUserPanel}: props) {
               >
                 ثبت نام
               </Link>
-              <Link href="/login" className="text-teal-600 hover:text-teal-900 text-sm md:text-base">
+              <Link
+                href="/login"
+                className="text-teal-600 hover:text-teal-900 text-sm md:text-base"
+              >
                 ورود
               </Link>
             </div>
           ) : (
             <div className="flex gap-3 items-center">
-              <Link href="/panel" className="text-teal-600 hover:text-teal-900 text-sm md:text-base">
+              <Link
+                href={isUserPanel ? "/dashboard" : "/panel"}
+                className="text-teal-600 hover:text-teal-900 text-sm md:text-base"
+              >
                 داشبورد
               </Link>
               <button

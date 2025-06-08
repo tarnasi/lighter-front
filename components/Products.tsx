@@ -5,11 +5,12 @@ import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useCategoryStore } from "@/stores/categoryStore";
 import { useQuery } from "@apollo/client";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
 export default function Products({}: Props) {
+  const [numberOfProduct, setNumberOfProduct] = useState(0)
   const selectedCategory = useCategoryStore((state) => state.selectedCategory);
 
   const {
@@ -28,6 +29,17 @@ export default function Products({}: Props) {
       categoryId: selectedCategory === "all" ? null : selectedCategory,
     });
   }, [selectedCategory]);
+
+  const addToProduct = () => {
+    setNumberOfProduct(numberOfProduct + 1)
+  }
+
+  const removeToProduct = () => {
+    if (numberOfProduct <= 0) {
+      return
+    }
+    setNumberOfProduct(numberOfProduct - 1)
+  }
 
   if (productLoading) return <LoadingSkeleton />;
   if (productError) return <p>{productError.message}</p>;
@@ -74,7 +86,7 @@ export default function Products({}: Props) {
               </div>
 
               {/* بدنه کارت */}
-              <div className="flex-1 p-4 text-sm flex flex-col justify-between gap-2">
+              <div className="flex-1 p-4 flex flex-col justify-between gap-3">
                 <h3 className="font-bold text-base text-gray-800">
                   {product.title}
                 </h3>
@@ -82,28 +94,28 @@ export default function Products({}: Props) {
                 {/* قیمت */}
                 <div className="text-sm">
                   {hasDiscount ? (
-                    <div className="flex items-center gap-2">
-                      <span className="line-through text-red-400">
-                        {product.price.toLocaleString()} تومان
-                      </span>
+                    <div className="flex flex-col gap-2">
                       <span className="text-green-600 font-bold">
                         {discountedPrice.toLocaleString()} تومان
                       </span>
-                      <span className="bg-red-100 text-red-600 px-1 rounded text-xs">
-                        ٪{product.discount}
+                      <span className="text-sm sm:text-base text-gray-400 flex gap-1">
+                        <span className="line-through">{product.price.toLocaleString()}</span>
+                        <span className="bg-red-100 text-red-600 px-1 rounded text-sm">
+                          ٪{product.discount}
+                        </span>
                       </span>
                     </div>
                   ) : (
-                    <span className="font-medium text-gray-700">
+                    <span className="text-green-600 font-bold">
                       {product.price.toLocaleString()} تومان
                     </span>
                   )}
                 </div>
 
                 {/* موجودی */}
-                <div className="text-xs text-gray-600">
+                <div className="text-sm text-teal-500 font-bold">
                   {Number(product.quantity) > 0 ? (
-                    `موجودی: ${product.quantity}`
+                    `تعداد: ${product.quantity}`
                   ) : (
                     <span className="text-red-600 underline underline-offset-4">
                       اتمام موجودی
