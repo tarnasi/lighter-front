@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 export default async function DashboardPage() {
   return (
     <div className="w-full relative min-h-screen">
-      <Navbar isPanel={true} />
+      <Navbar isUserPanel={true} />
       <BottomNavigation />
     </div>
   )

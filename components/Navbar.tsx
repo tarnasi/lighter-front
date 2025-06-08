@@ -12,11 +12,11 @@ import { ME_QUERY } from "@/apollo/queries";
 const logo_name = "فروشگاه";
 
 type props = {
-  isPanel: boolean
+  isUserPanel: boolean
 }
 
 
-export default function Navbar({isPanel}: props) {
+export default function Navbar({isUserPanel}: props) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
@@ -45,7 +45,7 @@ export default function Navbar({isPanel}: props) {
     Cookies.remove("accessToken");
     Cookies.remove("me");
     setIsLoggedIn(false);
-    window.location.href = "/"; // یا /login یا هر جا
+    window.location.href = "/";
   };
 
   return (
@@ -64,7 +64,7 @@ export default function Navbar({isPanel}: props) {
           </Link>
 
           {!isLoggedIn ? (
-            <div className="flex gap-1">
+            <div className="flex gap-3">
               <Link
                 href="/register"
                 className="text-teal-600 hover:text-teal-900 text-sm md:text-base"
