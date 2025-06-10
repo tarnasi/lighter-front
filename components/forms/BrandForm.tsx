@@ -4,13 +4,14 @@ import {
   BRAND_CREATE_MUTATION,
   BRAND_UPDATE_MUTATION,
 } from "@/apollo/mutations";
-import { BRAND_BY_ID_QUERY, CATEGORY_LIST_QUERY } from "@/apollo/queries";
+import { BRAND_BY_ID_QUERY } from "@/apollo/queries";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ImageUploader from "./inputs/ImageUploader";
+import { useCategoryList } from "@/hooks/useCategoryList";
 
 type Props = {
   brandId?: string;
@@ -34,10 +35,12 @@ function BrandForm({ brandId }: Props) {
   const router = useRouter();
 
   const {
-    data: categoryData,
+    categories: categoryData,
     loading: categoryLoading,
     error: categoryError,
-  } = useQuery(CATEGORY_LIST_QUERY);
+  } = useCategoryList({
+    pagination: { page: 1, pageSize: 1000 },
+  });
 
   const [getBrand, { called, data, loading, error }] = useLazyQuery(
     BRAND_BY_ID_QUERY,
@@ -150,7 +153,7 @@ function BrandForm({ brandId }: Props) {
           onChange={(e) => setCategory(String(e.target.value))}
         >
           <option value="">انتخاب کنید...</option>
-          {categoryData?.categoryList?.map((cat: any) => (
+          {categoryData?.map((cat: any) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
             </option>

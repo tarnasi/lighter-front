@@ -1,34 +1,38 @@
 "use client";
 
 import { PRODUCT_DELETE_MUTATION } from "@/apollo/mutations";
-import {
-  BRAND_LIST_QUERY,
-  CATEGORY_LIST_QUERY,
-  PRODUCT_LIST_QUERY,
-} from "@/apollo/queries";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 import { Select, Button } from "antd";
+import { useCategoryList } from "@/hooks/useCategoryList";
+import { useBrandList } from "@/hooks/useBrandList";
+import { useProductList } from "@/hooks/useProductList";
 
 export default function ProductTable() {
-  const { data: categoryData } = useQuery(CATEGORY_LIST_QUERY);
-  const { data: brandData } = useQuery(BRAND_LIST_QUERY);
+  const { categories: categoryData } = useCategoryList({
+    pagination: { page: 1, pageSize: 1000 },
+  });
+
+  const { brands: brandData } = useBrandList({
+    pagination: { page: 1, pageSize: 1000 },
+  });
 
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [brandId, setBrandId] = useState<string | null>(null);
 
   const {
-    data: productData,
+    products: productData,
     loading: productLoading,
     error: productError,
     refetch: productRefetch,
-  } = useQuery(PRODUCT_LIST_QUERY, {
-    variables: { categoryId, brandId },
+  } = useProductList({
+    categoryId,
+    brandId,
   });
 
   const [deleteProduct] = useMutation(PRODUCT_DELETE_MUTATION);
@@ -67,7 +71,7 @@ export default function ProductTable() {
           onChange={(value) => setCategoryId(value ?? null)}
           className="w-full sm:w-1/3"
           options={
-            categoryData?.categoryList?.map((cat: any) => ({
+            categoryData?.map((cat: any) => ({
               value: cat.id,
               label: `${cat.name} (${cat.slug})`,
             })) || []
@@ -82,7 +86,7 @@ export default function ProductTable() {
           onChange={(value) => setBrandId(value ?? null)}
           className="w-full sm:w-1/3"
           options={
-            brandData?.brandList?.map((brand: any) => ({
+            brandData?.map((brand: any) => ({
               value: brand.id,
               label: `${brand.name} (${brand.slug})`,
             })) || []
@@ -102,7 +106,7 @@ export default function ProductTable() {
         </Link>
 
         {/* Product Cards */}
-        {productData?.productList?.map((product: any) => {
+        {productData?.map((product: any) => {
           const hasDiscount = product.discount > 0;
           const discountedPrice = hasDiscount
             ? product.price - product.price * (product.discount / 100)

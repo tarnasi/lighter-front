@@ -1,9 +1,8 @@
 "use client";
 
-import { PRODUCT_LIST_QUERY } from "@/apollo/queries";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { useProductList } from "@/hooks/useProductList";
 import { useCategoryStore } from "@/stores/categoryStore";
-import { useQuery } from "@apollo/client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
@@ -15,14 +14,12 @@ export default function Products({}: Props) {
   const selectedCategory = useCategoryStore((state) => state.selectedCategory);
 
   const {
-    data: productData,
+    products: productData,
     loading: productLoading,
     error: productError,
     refetch: productRefetch,
-  } = useQuery(PRODUCT_LIST_QUERY, {
-    variables: {
-      categoryId: selectedCategory == "all" ? null : selectedCategory,
-    },
+  } = useProductList({
+    categoryId: selectedCategory == "all" ? null : selectedCategory,
   });
 
   useEffect(() => {
@@ -48,7 +45,7 @@ export default function Products({}: Props) {
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 text-gray-800">
       <div className="flex overflow-x-auto gap-4 py-4 px-2">
-        {productData?.productList?.map((product: any) => {
+        {productData?.map((product: any) => {
           const hasDiscount = product.discount > 0;
           const discountedPrice = hasDiscount
             ? product.price - product.price * (product.discount / 100)
@@ -83,7 +80,9 @@ export default function Products({}: Props) {
               {/* دسته بندی و برند */}
               <div className="bg-gray-100 text-xs px-4 py-1 text-gray-700 flex justify-start gap-1 items-center">
                 <span>{product.category.name}</span>
-                <span><BsCaretLeftFill /></span>
+                <span>
+                  <BsCaretLeftFill />
+                </span>
                 <span>{product.brand.name}</span>
               </div>
 

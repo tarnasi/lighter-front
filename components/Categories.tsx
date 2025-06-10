@@ -1,41 +1,47 @@
 "use client";
 
-import { CATEGORY_LIST_QUERY } from "@/apollo/queries";
-import { useQuery } from "@apollo/client";
-
-import React, { useEffect } from "react";
+import React from "react";
 import EmptyBox from "./EmptyBox";
 import LoadingSkeleton from "./LoadingSkeleton";
 import Image from "next/image";
-
 import { useCategoryStore } from "@/stores/categoryStore";
+import { useCategoryList } from "@/hooks/useCategoryList";
+
 
 const Categories = () => {
-  const { data, loading, error, refetch } = useQuery(CATEGORY_LIST_QUERY);
+  console.log("Calling Category Data...");
+  const {
+    categories : categoryData,
+    loading,
+    error,
+  } = useCategoryList({
+    search: "",
+    sort: { field: "name", order: "ASC" },
+    pagination: { page: 1, pageSize: 10 },
+  });
+
   const setSelectedCategory = useCategoryStore(
     (state) => state.setSelectedCategory
   );
 
-  useEffect(() => {
-    refetch();
-  }, []);
-
   if (loading) return <LoadingSkeleton />;
-  if (error || !data) return <EmptyBox />;
+  if (error) return <EmptyBox />;
+
+  if (!categoryData.length) return <EmptyBox />;
 
   const manualAllCategory = {
     id: "all",
     name: "محصولات",
     slug: "all",
-    image: `${process.env.NEXT_PUBLIC_API_URL}/uploads/default/boxes.png`, // replace with your actual fallback image path
+    image: `${process.env.NEXT_PUBLIC_API_URL}/uploads/default/boxes.png`,
   };
 
-  const categories = [manualAllCategory, ...data.categoryList];
+  const categories = [manualAllCategory, ...categoryData];
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
       <div className="flex overflow-x-auto gap-4 py-4 scrollbar-hide">
-        {categories.map((cat: any) => (
+        {categories.map((cat) => (
           <button
             key={cat.id}
             onClick={() =>

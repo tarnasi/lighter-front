@@ -41,7 +41,7 @@ export default function ProductSearchForm({ categories, brands, onFilter }: Prop
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">همه دسته‌ها</option>
-          {categories.map((cat) => (
+          {categories?.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.name}
             </option>

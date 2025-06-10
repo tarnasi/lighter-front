@@ -1,26 +1,38 @@
 "use client";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { CATEGORY_LIST_QUERY } from "@/apollo/queries";
 import { useEffect } from "react";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
-
-import { FaTrashCan } from "react-icons/fa6";
-import { FaEdit } from "react-icons/fa";
-import Link from "next/link";
+import { useMutation } from "@apollo/client";
 import { CATEGORY_DELETE_MUTATION } from "@/apollo/mutations";
-import EmptyBox from "@/components/EmptyBox";
+import { useCategoryList } from "@/hooks/useCategoryList";
+
+import Link from "next/link";
 import Image from "next/image";
 
+import LoadingSkeleton from "@/components/LoadingSkeleton";
+import EmptyBox from "@/components/EmptyBox";
+import { FaTrashCan } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+
 const CategoryTable = () => {
-  const { data, loading, error, refetch } = useQuery(CATEGORY_LIST_QUERY);
-  const [ deleteCategory, { loading: deleteLoading, error: deleteError }] =
+  const {
+    categories,
+    loading,
+    error,
+    refetch,
+  } = useCategoryList({
+    search: "",
+    sort: { field: "name", order: "ASC" },
+    pagination: { page: 1, pageSize: 10 },
+  });
+
+  const [deleteCategory, { loading: deleteLoading, error: deleteError }] =
     useMutation(CATEGORY_DELETE_MUTATION, {
       refetchQueries: ["CategoryList"],
     });
 
   useEffect(() => {
     if (error?.message.includes("مجاز")) {
+      // Optional custom logic
     }
   }, [error]);
 
@@ -30,6 +42,7 @@ const CategoryTable = () => {
 
   if (loading) return <LoadingSkeleton />;
   if (error) return <p className="text-red-500">{error.message}</p>;
+  if (categories.length === 0) return <EmptyBox />;
 
   const handleDeleteCategory = async (id: string) => {
     try {
@@ -40,17 +53,13 @@ const CategoryTable = () => {
     }
   };
 
-  if (data?.categoryList?.length === 0) {
-    return <EmptyBox />;
-  }
-
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
       {/* DESKTOP */}
       <div className="hidden md:block overflow-x-auto py-8">
         <Link
           href="/panel/categories/create"
-          className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
+          className="border bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
         >
           ایجاد دسته بندی جدید
         </Link>
@@ -66,7 +75,7 @@ const CategoryTable = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.categoryList?.map((category: any) => (
+            {categories?.map((category:any) => (
               <tr key={category.id} className="text-lg text-black">
                 <td className="p-2 border">{category.name}</td>
                 <td className="p-2 border">{category.slug}</td>
@@ -75,38 +84,32 @@ const CategoryTable = () => {
                     <span className="text-gray-500">ثبت نشده</span>
                   )}
                 </td>
-                <td className="p-2 border border-gray-400 flex items-center justify-center">
-                  <Image
-                    src={
-                      category.image || (
-                        <span className="text-gray-500">ثبت نشده</span>
-                      )
-                    }
-                    alt="عکس"
-                    width={32}
-                    height={32}
-                    className="object-cover rounded-md"
-                  />
+                <td className="p-2 border flex items-center justify-center">
+                  {category.image ? (
+                    <Image
+                      src={category.image}
+                      alt="عکس"
+                      width={32}
+                      height={32}
+                      className="object-cover rounded-md"
+                    />
+                  ) : (
+                    <span className="text-gray-500 text-sm">ثبت نشده</span>
+                  )}
                 </td>
                 <td className="p-2 border">
                   <Link
                     href={`/panel/categories/update/${category.id}`}
                     className="flex items-center justify-evenly gap-2"
                   >
-                    <span>
-                      <FaEdit className="text-blue-900 hover:text-sky-500 hover:cursor-pointer" />
-                    </span>
+                    <FaEdit className="text-blue-900 hover:text-sky-500 hover:cursor-pointer" />
                   </Link>
                 </td>
                 <td className="p-2 border">
-                  <div className="flex items-center justify-evenly gap-2">
-                    <span>
-                      <FaTrashCan
-                        onClick={() => handleDeleteCategory(category.id)}
-                        className="text-red-600 hover:text-amber-500 hover:cursor-pointer"
-                      />
-                    </span>
-                  </div>
+                  <FaTrashCan
+                    onClick={() => handleDeleteCategory(category.id)}
+                    className="text-red-600 hover:text-amber-500 hover:cursor-pointer"
+                  />
                 </td>
               </tr>
             ))}
@@ -118,11 +121,11 @@ const CategoryTable = () => {
       <div className="md:hidden grid grid-cols-1 gap-4 py-4">
         <Link
           href="/panel/categories/create"
-          className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
+          className="border bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
         >
           ایجاد دسته بندی جدید
         </Link>
-        {data?.categoryList?.map((category: any) => (
+        {categories?.map((category:any) => (
           <div
             key={category.id}
             className="border px-4 pb-1 pt-3 rounded text-sm border-gray-200"
@@ -139,17 +142,17 @@ const CategoryTable = () => {
                   <strong>توضیحات:</strong> {category.description || "-"}
                 </p>
               </div>
-              <Image
-                src={
-                  category.image || (
-                    <span className="text-gray-500">ثبت نشده</span>
-                  )
-                }
-                alt="عکس"
-                width={48}
-                height={48}
-                className="object-cover rounded-md"
-              />
+              {category.image ? (
+                <Image
+                  src={category.image}
+                  alt="عکس"
+                  width={48}
+                  height={48}
+                  className="object-cover rounded-md"
+                />
+              ) : (
+                <span className="text-gray-500">ثبت نشده</span>
+              )}
             </div>
             <div className="flex items-center justify-evenly mt-4 border-t-2 pt-6 pb-4">
               <Link
@@ -162,7 +165,8 @@ const CategoryTable = () => {
                 className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
                 onClick={() => handleDeleteCategory(category.id)}
               >
-                <FaTrashCan />حذف
+                <FaTrashCan />
+                حذف
               </button>
             </div>
           </div>

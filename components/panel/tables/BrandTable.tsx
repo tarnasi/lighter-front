@@ -1,55 +1,54 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect } from "react";
-import { FaEdit } from "react-icons/fa";
-import { FaTrashCan } from "react-icons/fa6";
-import EmptyBox from "@/components/EmptyBox";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
-import { useMutation, useQuery } from "@apollo/client";
-import { BRAND_LIST_QUERY } from "@/apollo/queries";
+import { useEffect } from "react";
+import { useMutation } from "@apollo/client";
+import { useBrandList } from "@/hooks/useBrandList";
 import { BRAND_DELETE_MUTATION } from "@/apollo/mutations";
 
-type Props = {};
+import Link from "next/link";
+import Image from "next/image";
 
-export default function BrandTable({}: Props) {
+import LoadingSkeleton from "@/components/LoadingSkeleton";
+import EmptyBox from "@/components/EmptyBox";
+
+import { FaTrashCan } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+
+const BrandTable = () => {
   const {
-    data: brandData,
-    loading: brandLoading,
-    error: brandError,
-    refetch: brandRefetch,
-  } = useQuery(BRAND_LIST_QUERY);
-
-  const [deleteBrand, { loading: deleteLoading, error: deleteError }] =
-    useMutation(BRAND_DELETE_MUTATION, {
-      refetchQueries: ["BrandList"],
-    });
-
-  useEffect(() => {
-    if (brandError?.message.includes("مجاز")) {
+    brands,
+    loading,
+    error,
+    refetch,
+  } = useBrandList({
+    search: "",
+    sort: { field: "name", order: "ASC" },
+    pagination: {
+      page: 1,
+      pageSize: 20,
     }
-  }, [brandError]);
+  });
+
+  const [deleteBrand] = useMutation(BRAND_DELETE_MUTATION, {
+    refetchQueries: ["BrandList"],
+  });
 
   useEffect(() => {
-    brandRefetch();
+    refetch();
   }, []);
-
-  if (brandLoading) return <LoadingSkeleton />;
-  if (brandError) return <p className="text-red-500">{brandError.message}</p>;
 
   const handleDeleteBrand = async (id: string) => {
     try {
       await deleteBrand({ variables: { id } });
-      await brandRefetch();
+      await refetch();
     } catch (err) {
-      console.error("Failed to delete category", err);
+      console.error("Failed to delete brand", err);
     }
   };
 
-  if (brandData?.categoryList?.length === 0) {
-    return <EmptyBox />;
-  }
+  if (loading) return <LoadingSkeleton />;
+  if (error) return <p className="text-red-500">{error.message}</p>;
+  if (brands.length === 0) return <EmptyBox />;
 
   return (
     <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
@@ -57,68 +56,57 @@ export default function BrandTable({}: Props) {
       <div className="hidden md:block overflow-x-auto py-8">
         <Link
           href="/panel/brands/create"
-          className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
+          className="border bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
         >
           ایجاد برند جدید
         </Link>
-        <table className="w-full min-w-[600px] border mt-4 text-center">
+        <table className="w-full min-w-[800px] border mt-4 text-center">
           <thead>
             <tr className="bg-teal-800 text-gray-200 text-sm">
               <th className="p-2 border">نام</th>
               <th className="p-2 border">نام انگلیسی (SEO)</th>
               <th className="p-2 border">توضیحات</th>
-              <th className="p-2 border">دسته بندی</th>
               <th className="p-2 border">تصویر</th>
+              <th className="p-2 border">تعداد محصولات</th>
               <th className="p-2 border">ویرایش</th>
               <th className="p-2 border">حذف</th>
             </tr>
           </thead>
           <tbody>
-            {brandData?.brandList?.map((brand: any) => (
-              <tr key={brand.id} className="text-lg text-black border">
-                <td className="p-2 border">
-                  {brand.category.name}({brand.category.slug})
-                </td>
+            {brands.map((brand: any) => (
+              <tr key={brand.id} className="text-sm text-black border">
                 <td className="p-2 border">{brand.name}</td>
                 <td className="p-2 border">{brand.slug}</td>
                 <td className="p-2 border">
-                  {brand.description || (
-                    <span className="text-gray-500">ثبت نشده</span>
-                  )}
+                  {brand.description || <span className="text-gray-500">ثبت نشده</span>}
                 </td>
-                <td className="p-2 flex items-center justify-center">
-                  {typeof brand.image === "string" &&
-                  brand.image.trim() !== "" ? (
+                <td className="p-2 border flex items-center justify-center">
+                  {brand.image ? (
                     <Image
                       src={brand.image}
-                      alt="عکس"
-                      width={48}
-                      height={48}
-                      className="object-cover"
+                      alt="Brand"
+                      width={32}
+                      height={32}
+                      className="object-cover rounded-md"
                     />
                   ) : (
                     <span className="text-gray-500 text-sm">ثبت نشده</span>
                   )}
                 </td>
+                <td className="p-2 border">{brand.products?.length ?? 0}</td>
                 <td className="p-2 border">
                   <Link
                     href={`/panel/brands/update/${brand.id}`}
-                    className="flex items-center justify-evenly gap-2"
+                    className="flex items-center justify-center gap-2"
                   >
-                    <span>
-                      <FaEdit className="text-blue-900 hover:text-sky-500 hover:cursor-pointer" />
-                    </span>
+                    <FaEdit className="text-blue-900 hover:text-sky-500" />
                   </Link>
                 </td>
                 <td className="p-2 border">
-                  <div className="flex items-center justify-evenly gap-2">
-                    <span>
-                      <FaTrashCan
-                        onClick={() => handleDeleteBrand(brand.id)}
-                        className="text-red-600 hover:text-amber-500 hover:cursor-pointer"
-                      />
-                    </span>
-                  </div>
+                  <FaTrashCan
+                    onClick={() => handleDeleteBrand(brand.id)}
+                    className="text-red-600 hover:text-amber-500 hover:cursor-pointer"
+                  />
                 </td>
               </tr>
             ))}
@@ -130,20 +118,17 @@ export default function BrandTable({}: Props) {
       <div className="md:hidden grid grid-cols-1 gap-4 py-4">
         <Link
           href="/panel/brands/create"
-          className="border border-gra bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
+          className="border bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
         >
           ایجاد برند جدید
         </Link>
-        {brandData?.brandList?.map((brand: any) => (
+        {brands.map((brand: any) => (
           <div
             key={brand.id}
             className="border px-4 pb-1 pt-3 rounded text-sm border-gray-200"
           >
             <div className="flex justify-between items-center">
               <div className="flex flex-col gap-1">
-                <p>
-                  <strong>دسته بندی:</strong> {brand.category.name} ({brand.category.slug})
-                </p>
                 <p>
                   <strong>نام:</strong> {brand.name}
                 </p>
@@ -153,11 +138,14 @@ export default function BrandTable({}: Props) {
                 <p>
                   <strong>توضیحات:</strong> {brand.description || "-"}
                 </p>
+                <p>
+                  <strong>تعداد محصولات:</strong> {brand.products?.length ?? 0}
+                </p>
               </div>
-              {typeof brand.image === "string" && brand.image.trim() !== "" ? (
+              {brand.image ? (
                 <Image
                   src={brand.image}
-                  alt="عکس"
+                  alt="عکس برند"
                   width={48}
                   height={48}
                   className="object-cover rounded-md"
@@ -174,8 +162,8 @@ export default function BrandTable({}: Props) {
                 <FaEdit /> ویرایش
               </Link>
               <button
-                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
                 onClick={() => handleDeleteBrand(brand.id)}
+                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
               >
                 <FaTrashCan />
                 حذف
@@ -186,4 +174,6 @@ export default function BrandTable({}: Props) {
       </div>
     </div>
   );
-}
+};
+
+export default BrandTable;

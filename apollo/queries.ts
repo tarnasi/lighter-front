@@ -29,13 +29,22 @@ export const USER_LIST_QUERY = gql`
 `;
 
 export const CATEGORY_LIST_QUERY = gql`
-  query CategoryList {
-    categoryList {
-      id
-      name
-      slug
-      description
-      image
+  query CategoryList(
+    $search: String
+    $sort: CategorySortInput
+    $pagination: CategoryPaginationInput
+  ) {
+    categoryList(search: $search, sort: $sort, pagination: $pagination) {
+      items {
+        id
+        name
+        slug
+        description
+        image
+      }
+      total
+      page
+      pageSize
     }
   }
 `;
@@ -60,18 +69,22 @@ export const CATEGORY_BY_ID_QUERY = gql`
 `;
 
 export const BRAND_LIST_QUERY = gql`
-  query BrandList {
-    brandList {
-      id
-      name
-      slug
-      description
-      image
-      category {
+  query BrandList(
+    $search: String
+    $sort: sortBrandInput
+    $pagination: BrandPaginationInput
+  ) {
+    brandList(search: $search, sort: $sort, pagination: $pagination) {
+      items {
         id
         name
         slug
+        description
+        image
       }
+      total
+      page
+      pageSize
     }
   }
 `;
@@ -94,33 +107,50 @@ export const BRAND_BY_ID_QUERY = gql`
 `;
 
 export const PRODUCT_LIST_QUERY = gql`
-  query ProductList($categoryId: ID, $brandId: ID) {
-    productList(categoryId: $categoryId, brandId: $brandId) {
-      id
-      title
-      slug
-      images
-      description
-      price
-      discount
-      quantity
-      is_pack
-      created_at
-      updated_at
-      category {
+  query ProductList(
+    $categoryId: ID
+    $brandId: ID
+    $search: String
+    $sort: SortProductInput
+    $pagination: PaginationProductInput
+  ) {
+    productList(
+      categoryId: $categoryId
+      brandId: $brandId
+      search: $search
+      sort: $sort
+      pagination: $pagination
+    ) {
+      items {
         id
-        name
+        title
         slug
+        images
         description
-        image
+        price
+        discount
+        quantity
+        is_pack
+        created_at
+        updated_at
+        category {
+          id
+          name
+          slug
+          description
+          image
+        }
+        brand {
+          id
+          name
+          slug
+          description
+          image
+        }
       }
-      brand {
-        id
-        name
-        slug
-        description
-        image
-      }
+      total
+      page
+      pageSize
     }
   }
 `;
