@@ -2,7 +2,7 @@
 
 import PageTitle from "@/components/PageTitle";
 import Navbar from "@/components/Navbar";
-import Products from "@/components/Products";
+import Products from "@/components/mainPage/LastFewSaltProducts";
 import { useParams } from 'next/navigation'
 
 export default function ProductPage() {

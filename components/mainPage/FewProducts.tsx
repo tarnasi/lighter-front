@@ -7,9 +7,11 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 
-type Props = {};
+type Props = {
+  title: string
+};
 
-export default function Products({}: Props) {
+export default function FewProducts({ title }: Props) {
   const [numberOfProduct, setNumberOfProduct] = useState(0);
   const selectedCategory = useCategoryStore((state) => state.selectedCategory);
 
@@ -43,7 +45,8 @@ export default function Products({}: Props) {
   if (productError) return <p>{productError.message}</p>;
 
   return (
-    <div className="px-4 md:px-16 lg:px-32 xl:px-64 text-gray-800">
+    <div className="py-4">
+      <h2 className="font-extrabold underline underline-offset-8">{title}</h2>
       <div className="flex overflow-x-auto gap-4 py-4 px-2">
         {productData?.map((product: any) => {
           const hasDiscount = product.discount > 0;
