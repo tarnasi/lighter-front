@@ -48,7 +48,7 @@ export default function CategoryBrands({ slug }: props) {
         {brands.map((brand: any) => {
           return (
             <Link
-              href={`/brand/${brand.slug}`}
+              href={`/category/${slug}/${brand.slug}`}
               className="flex-1"
               key={brand.id}
             >

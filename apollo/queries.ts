@@ -80,6 +80,9 @@ export const BRAND_LIST_QUERY = gql`
         slug
         description
         image
+        category {
+          slug
+        }
       }
       total
       page
@@ -100,6 +103,9 @@ export const BRAND_LIST_BY_CATEGORY_QUERY = gql`
         slug
         description
         image
+        category {
+          slug
+        }
       }
       total
       page
@@ -205,6 +211,31 @@ export const PRODUCT_BY_ID_QUERY = gql`
     }
   }
 `;
+
+export const PRODUCT_LIST_BY_BRAND_QUERY = gql`
+  query ProductByBrandSlug(
+    $brandSlug: String!
+    $pagination: PaginationProductInput
+    $sort: SortProductInput
+  ) {
+    productByBrandSlug(brandSlug: $brandSlug, pagination: $pagination, sort: $sort) {
+      items {
+        id
+        title
+        slug
+        images
+        price
+        discount
+        quantity
+        created_at
+      }
+      total
+      page
+      pageSize
+    }
+  }
+`;
+
 
 export const BASKET_QUERY = gql`
   query Product($id: ID!) {
