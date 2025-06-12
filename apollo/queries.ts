@@ -69,12 +69,31 @@ export const CATEGORY_BY_ID_QUERY = gql`
 `;
 
 export const BRAND_LIST_QUERY = gql`
-  query BrandList(
-    $search: String
-    $sort: sortBrandInput
+  query BrandByCategorySlug(
+    $catSlug: String
     $pagination: BrandPaginationInput
   ) {
-    brandList(search: $search, sort: $sort, pagination: $pagination) {
+    brandByCategorySlug(catSlug: $catSlug, pagination: $pagination) {
+      items {
+        id
+        name
+        slug
+        description
+        image
+      }
+      total
+      page
+      pageSize
+    }
+  }
+`;
+
+export const BRAND_LIST_BY_CATEGORY_QUERY = gql`
+  query BrandByCategorySlug(
+    $catSlug: String!
+    $pagination: BrandPaginationInput
+  ) {
+    brandByCategorySlug(catSlug: $catSlug, pagination: $pagination) {
       items {
         id
         name

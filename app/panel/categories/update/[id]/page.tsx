@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import PageTitle from "@/components/PageTitle";
 import { useParams } from "next/navigation";
 
-const CreateCategoryPage = async () => {
+const CreateCategoryPage = () => {
   const params = useParams<{ id: string }>();
 
   return (

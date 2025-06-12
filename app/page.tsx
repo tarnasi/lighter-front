@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Divider } from 'antd';
 import AppBottomNavigation from "@/components/dashboard/AppBottomNavigation";
 import FewProducts from "@/components/mainPage/FewProducts";
+import CategoryCardLink from "@/components/mainPage/CategoryCardLink";
 
 export default async function Home() {
   return (
@@ -15,6 +16,9 @@ export default async function Home() {
       {/* Main Product like a big card with 4 card bottom of it like two and two */}
       {/* Slider for product */}
       <div className="px-4 md:px-16 pb-24 lg:px-32 xl:px-64 text-gray-800">
+        {/* لینک دسته بندی */}
+        <CategoryCardLink />
+
         {/* Juice and Salt Category */}
         <LiquidCategory />
 
