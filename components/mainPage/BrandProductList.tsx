@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import BrandCard from "../BrandCard";
 
 export default function BrandProductList() {

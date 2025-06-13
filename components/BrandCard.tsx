@@ -21,13 +21,12 @@ export default function BrandCard({
   category,
   brand,
 }: Props) {
-
   const classColor = {
     fromColor: `from-${fromColor}`,
     toColor: `to-${toColor}`,
     hoverFromColor: `hover:from-${hoverFromColor}`,
     hovertoColor: `hover:to-${hovertoColor}`,
-  }
+  };
 
   return (
     <Link href={`/category/${category}/${brand}`} className="flex-1">
