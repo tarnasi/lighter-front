@@ -13,37 +13,37 @@ export default function BrandProductList() {
       {/* Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <BrandCard
-          fromColor="emerald-500"
-          toColor="emerald-800"
-          hoverFromColor="lime-400"
-          hovertoColor="teal-500"
+          fromColor="from-emerald-500"
+          toColor="to-emerald-800"
+          hoverFromColor="hover:from-lime-400"
+          hovertoColor="hover:to-teal-500"
           title="سالت ویگاد"
           category="salt"
           brand="vgod"
         />
         <BrandCard
-          fromColor="violet-600"
-          toColor="purple-900"
-          hoverFromColor="fuchsia-500"
-          hovertoColor="pink-400"
+          fromColor="from-violet-600"
+          toColor="to-purple-900"
+          hoverFromColor="hover:from-fuchsia-500"
+          hovertoColor="hover:to-pink-400"
           title="سالت نستی"
           category="salt"
           brand="Nasty"
         />
         <BrandCard
-          fromColor="rose-500"
-          toColor="red-800"
-          hoverFromColor="orange-400"
-          hovertoColor="amber-500"
+          fromColor="from-rose-500"
+          toColor="to-red-800"
+          hoverFromColor="hover:from-orange-400"
+          hovertoColor="hover:to-amber-500"
           title="جویس ویگاد"
           category="juice"
           brand="nasty-juice"
         />
         <BrandCard
-          fromColor="cyan-600"
-          toColor="teal-900"
-          hoverFromColor="sky-400"
-          hovertoColor="indigo-500"
+          fromColor="from-cyan-600"
+          toColor="to-teal-900"
+          hoverFromColor="hover:from-sky-400"
+          hovertoColor="hover:to-indigo-500"
           title="جویس نستی"
           category="juice"
           brand="vigod-juice"

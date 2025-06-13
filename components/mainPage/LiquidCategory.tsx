@@ -11,18 +11,18 @@ export default function LiquidCategory() {
       {/* Cards */}
       <div className="flex flex-row gap-4 justify-center">
         <CategoryCard
-          fromColor="red-600"
-          toColor="red-900"
-          hoverFromColor="pink-500"
-          hovertoColor="yellow-500"
+          fromColor="from-red-600"
+          toColor="to-red-900"
+          hoverFromColor="hover:from-pink-500"
+          hovertoColor="hover:to-yellow-500"
           title="جویس"
           category="juice"
         />
         <CategoryCard
-          fromColor="blue-600"
-          toColor="blue-900"
-          hoverFromColor="indigo-500"
-          hovertoColor="cyan-500"
+          fromColor="from-blue-600"
+          toColor="to-blue-900"
+          hoverFromColor="hover:from-indigo-500"
+          hovertoColor="hover:to-cyan-500"
           title="سالت"
           category="salt"
         />

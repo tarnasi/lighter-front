@@ -6,10 +6,10 @@ export default function HomeLighter() {
       {/* Cards */}
       <div className="flex flex-row gap-4 justify-center">
         <CategoryCard
-          fromColor="green-600"
-          toColor="green-900"
-          hoverFromColor="teal-500"
-          hovertoColor="green-500"
+          fromColor="from-green-600"
+          toColor="to-green-900"
+          hoverFromColor="hover:from-teal-500"
+          hovertoColor="hover:to-green-500"
           title="دستگاه پاد و ویپ"
           category="vape-pod"
         />
