@@ -12,7 +12,7 @@ const BrandProductListPage = () => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
-      <BrandProducts category={params.slug} brandSlug={params.brandSlug} />
+      <BrandProducts brandSlug={params.brandSlug} />
       <AppBottomNavigation />
     </div>
   );

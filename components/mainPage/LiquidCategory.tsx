@@ -1,4 +1,4 @@
-import Link from "next/link";
+import CategoryCard from "../CategoryCard";
 
 export default function LiquidCategory() {
   return (
@@ -10,27 +10,22 @@ export default function LiquidCategory() {
 
       {/* Cards */}
       <div className="flex flex-row gap-4 justify-center">
-        <Link href="/category/juice" className="flex-1">
-          <div
-              className="h-32 sm:h-48 w-full rounded-2xl bg-gradient-to-br from-red-600 to-red-900
-              flex items-center justify-center text-xl font-bold
-              transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-2xl
-              hover:from-pink-500 hover:to-yellow-500"
-          >
-            جویس
-          </div>
-        </Link>
-
-        <Link href="/category/salt" className="flex-1">
-          <div
-            className="h-32 sm:h-48 w-full rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900
-              flex items-center justify-center text-xl font-bold
-              transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-2xl
-              hover:from-indigo-500 hover:to-cyan-500"
-          >
-            سالت
-          </div>
-        </Link>
+        <CategoryCard
+          fromColor="red-600"
+          toColor="red-900"
+          hoverFromColor="pink-500"
+          hovertoColor="yellow-500"
+          title="جویس"
+          category="juice"
+        />
+        <CategoryCard
+          fromColor="blue-600"
+          toColor="blue-900"
+          hoverFromColor="indigo-500"
+          hovertoColor="cyan-500"
+          title="سالت"
+          category="salt"
+        />
       </div>
     </div>
   );

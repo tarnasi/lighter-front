@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { CATEGORY_DELETE_MUTATION } from "@/apollo/mutations";
-import { useCategoryList } from "@/hooks/useCategoryList";
+import { useCategoryList } from "@/hooks/useCategory";
 
 import Link from "next/link";
 import Image from "next/image";

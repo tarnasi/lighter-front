@@ -3,7 +3,7 @@
 import Link from "next/link";
 import LoadingSkeleton from "../LoadingSkeleton";
 import EmptyBox from "../EmptyBox";
-import { useCategoryList } from "@/hooks/useCategoryList";
+import { useCategoryList } from "@/hooks/useCategory";
 
 type props = {};
 

@@ -6,9 +6,9 @@ import {
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import LoadingSkeleton from "../LoadingSkeleton";
-import { useCategoryList } from "@/hooks/useCategoryList";
-import { useProductList } from "@/hooks/useProductList";
-import { useBrandList } from "@/hooks/useBrandList";
+import { useCategoryList } from "@/hooks/useCategory";
+import { useProductList } from "@/hooks/useProduct";
+import { useBrandList } from "@/hooks/useBrand";
 import { useEffect } from "react";
 
 export default function InfoCard() {

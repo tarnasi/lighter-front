@@ -2,10 +2,12 @@ import HomeLighter from "@/components/mainPage/homeLighter";
 import LiquidCategory from "@/components/mainPage/LiquidCategory";
 import Navbar from "@/components/Navbar";
 
-import { Divider } from 'antd';
+import { Divider } from "antd";
 import AppBottomNavigation from "@/components/dashboard/AppBottomNavigation";
-import FewProducts from "@/components/mainPage/FewProducts";
 import CategoryCardLink from "@/components/mainPage/CategoryCardLink";
+import LastProducts from "@/components/mainPage/LastProducts";
+import LastCategoryProducts from "@/components/mainPage/LastCategoryProducts";
+import BrandProductList from "@/components/mainPage/BrandProductList";
 
 export default async function Home() {
   return (
@@ -25,17 +27,26 @@ export default async function Home() {
         <Divider />
 
         {/* Last 5 product of Juice */}
-        <FewProducts title="آخرین محصولات جویس" />
-
+        <LastCategoryProducts title="آخرین محصولات جویس" category="juice" />
         <Divider />
 
-        {/* Last 5 product of Salt */}
-        <FewProducts title="آخرین محصولات سالت" />
+        <BrandProductList />
+        <Divider />
+
+        {/* Last 5 product of Juice */}
+        <LastCategoryProducts title="آخرین محصولات سالت" category="salt" />
+        <Divider />
 
         {/* فندک خانگی */}
         <HomeLighter />
+        <Divider />
 
-        <FewProducts title="پروفروش ترین محصولات" />
+        {/* Last 5 product of Salt */}
+        <div className="mb-8">
+          <LastProducts title="آخرین محصولات" />
+        </div>
+
+        {/* <BestSellerProducts title="پروفروش ترین محصولات" /> */}
       </div>
       <AppBottomNavigation />
     </>

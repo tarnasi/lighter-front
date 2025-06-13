@@ -1,22 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useProductListByBrand } from "@/hooks/useProductListByBrand";
+import { useProductListByBrand } from "@/hooks/useProduct";
 import Link from "next/link";
 import LoadingSkeleton from "../LoadingSkeleton";
 import EmptyBox from "../EmptyBox";
 
 type Props = {
   brandSlug: string;
-  category: string;
 };
 
-export default function BrandProducts({ category, brandSlug }: Props) {
+export default function BrandProducts({ brandSlug }: Props) {
   const [page, setPage] = useState(1);
   const pageSize = 12;
 
   const { products, total, loading, error, refetch } = useProductListByBrand({
-    brandSlug,
+    slug: brandSlug,
     pagination: { page, pageSize },
     sort: { field: "created_at", order: "DESC" },
   });

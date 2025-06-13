@@ -5,7 +5,7 @@ import EmptyBox from "./EmptyBox";
 import LoadingSkeleton from "./LoadingSkeleton";
 import Image from "next/image";
 import { useCategoryStore } from "@/stores/categoryStore";
-import { useCategoryList } from "@/hooks/useCategoryList";
+import { useCategoryList } from "@/hooks/useCategory";
 
 
 const Categories = () => {

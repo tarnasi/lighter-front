@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { useBrandList } from "@/hooks/useBrandList";
+import { useBrandList } from "@/hooks/useBrand";
 import { BRAND_DELETE_MUTATION } from "@/apollo/mutations";
 
 import Link from "next/link";

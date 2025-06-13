@@ -1,6 +1,6 @@
 "use client";
 
-import { useBrandListByCategory } from "@/hooks/useBrandListByCategory";
+import { useBrandListByCategory } from "@/hooks/useBrand";
 import Link from "next/link";
 import LoadingSkeleton from "../LoadingSkeleton";
 import EmptyBox from "../EmptyBox";

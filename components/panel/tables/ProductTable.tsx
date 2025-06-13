@@ -9,9 +9,9 @@ import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 import { Select, Button } from "antd";
-import { useCategoryList } from "@/hooks/useCategoryList";
-import { useBrandList } from "@/hooks/useBrandList";
-import { useProductList } from "@/hooks/useProductList";
+import { useCategoryList } from "@/hooks/useCategory";
+import { useBrandList } from "@/hooks/useBrand";
+import { useProductList } from "@/hooks/useProduct";
 
 export default function ProductTable() {
   const { categories: categoryData } = useCategoryList({

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default async function CategoryCardLink() {
+export default function CategoryCardLink() {
   return (
     <div className="w-full max-w-5xl mx-auto pt-8 pb-2 text-white text-center">
       {/* Cards */}

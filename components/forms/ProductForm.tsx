@@ -11,7 +11,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import GroupImageUploader from "./inputs/GroupImageUploader";
-import { useCategoryList } from "@/hooks/useCategoryList";
+import { useCategoryList } from "@/hooks/useCategory";
 
 type Props = {
   productId?: string;

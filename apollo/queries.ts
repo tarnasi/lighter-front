@@ -218,7 +218,11 @@ export const PRODUCT_LIST_BY_BRAND_QUERY = gql`
     $pagination: PaginationProductInput
     $sort: SortProductInput
   ) {
-    productByBrandSlug(brandSlug: $brandSlug, pagination: $pagination, sort: $sort) {
+    productByBrandSlug(
+      brandSlug: $brandSlug
+      pagination: $pagination
+      sort: $sort
+    ) {
       items {
         id
         title
@@ -228,6 +232,16 @@ export const PRODUCT_LIST_BY_BRAND_QUERY = gql`
         discount
         quantity
         created_at
+        category {
+          id
+          name
+          slug
+        }
+        brand {
+          id
+          name
+          slug
+        }
       }
       total
       page
@@ -236,6 +250,43 @@ export const PRODUCT_LIST_BY_BRAND_QUERY = gql`
   }
 `;
 
+export const PRODUCT_LIST_BY_CATEGORY_QUERY = gql`
+  query ProductByCategorySlug(
+    $catSlug: String!
+    $pagination: PaginationProductInput
+    $sort: SortProductInput
+  ) {
+    productByCategorySlug(
+      catSlug: $catSlug
+      pagination: $pagination
+      sort: $sort
+    ) {
+      items {
+        id
+        title
+        slug
+        images
+        price
+        discount
+        quantity
+        created_at
+        category {
+          id
+          name
+          slug
+        }
+        brand {
+          id
+          name
+          slug
+        }
+      }
+      total
+      page
+      pageSize
+    }
+  }
+`;
 
 export const BASKET_QUERY = gql`
   query Product($id: ID!) {
