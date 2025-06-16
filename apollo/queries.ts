@@ -363,3 +363,92 @@ export const REMOVE_FROM_BASKET_MUTATION = gql`
     }
   }
 `;
+
+export const MY_ORDERS_QUERY = gql`
+  query MyOrders {
+    myOrders {
+      id
+      status
+      total_price
+      is_wholesaler
+      created_at
+      items {
+        quantity
+        price
+        product {
+          id
+          title
+          slug
+          images
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORDER_QUERY = gql`
+  query GetOrder($id: ID!) {
+    getOrder(id: $id) {
+      id
+      status
+      total_price
+      is_wholesaler
+      created_at
+      updated_at
+      user {
+        id
+        full_name
+      }
+      items {
+        quantity
+        price
+        product {
+          id
+          title
+          slug
+          images
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_ORDER_MUTATION = gql`
+  mutation CreateOrder($input: CreateOrderInput!) {
+    createOrder(input: $input) {
+      id
+      status
+      total_price
+      is_wholesaler
+      created_at
+      items {
+        quantity
+        price
+        product {
+          id
+          title
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_ORDER_STATUS_MUTATION = gql`
+  mutation UpdateOrderStatus($id: ID!, $status: String!) {
+    updateOrderStatus(id: $id, status: $status) {
+      id
+      status
+      updated_at
+    }
+  }
+`;
+
+export const CANCEL_ORDER_MUTATION = gql`
+  mutation CancelOrder($id: ID!) {
+    cancelOrder(id: $id) {
+      id
+      status
+      updated_at
+    }
+  }
+`;

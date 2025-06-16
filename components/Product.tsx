@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import { BsCaretLeftFill } from "react-icons/bs";
+import { useOrderStore } from "@/stores/useOrderStore";
+import { useMessageStore } from "@/stores/messageStore";
 
 type Props = {
   product: any;
@@ -11,12 +15,18 @@ export default function Product({ product }: Props) {
     ? product.price - product.price * (product.discount / 100)
     : product.price;
 
+  const { showMessage } = useMessageStore();
+  const { items, addToOrder, increaseQty, decreaseQty, removeFromOrder } =
+    useOrderStore();
+
+  const itemInOrder = items.find((item) => item.id === product.id);
+
   return (
     <div
       key={product.id}
       className="bg-white scroll-smooth rounded-xl border shadow-sm hover:cursor-pointer hover:shadow-lg overflow-hidden flex-shrink-0 flex flex-col w-55"
     >
-      {/* عکس با نشان is_pack */}
+      {/* تصویر و نشان is_pack */}
       <div className="relative w-full h-40 bg-white">
         {product.is_pack && (
           <div className="absolute top-2 right-2 bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow z-10">
@@ -81,6 +91,63 @@ export default function Product({ product }: Props) {
             <span className="text-red-600 underline underline-offset-4">
               اتمام موجودی
             </span>
+          )}
+        </div>
+
+        {/* سفارش / کنترل تعداد */}
+        <div className="mt-2">
+          {Number(product.quantity) <= 0 ? (
+            <button
+              className="w-full text-center bg-yellow-400 text-black py-1 rounded"
+              onClick={() => {
+                showMessage({
+                  content: "وقتی موجود شد بهت اطلاع می‌دیم 😉",
+                  type: "success",
+                  key: "productReport",
+                });
+              }}
+            >
+              خبرم کن
+            </button>
+          ) : !itemInOrder ? (
+            <button
+              onClick={() => addToOrder(product)}
+              className="w-full text-center bg-blue-500 text-white py-1 rounded"
+            >
+              افزودن به سفارش
+            </button>
+          ) : (
+            <div className="flex items-center justify-between gap-2">
+              <button
+                onClick={() => {
+                  if (itemInOrder.quantity === 1) {
+                    removeFromOrder(product.id);
+                  } else {
+                    decreaseQty(product.id);
+                  }
+                }}
+                className="bg-gray-300 px-3 py-1 rounded"
+              >
+                -
+              </button>
+              <span className="text-sm font-bold">{itemInOrder.quantity}</span>
+              <button
+                onClick={() => {
+                  if (itemInOrder.quantity < product.quantity) {
+                    increaseQty(product.id);
+                  } else {
+                    showMessage({
+                      content: "موجودی بیشتر از این نداریم",
+                      type: "warning",
+                      key: "quantity",
+                    });
+                  }
+                }}
+                className="bg-gray-300 px-3 py-1 rounded"
+              >
+                +
+              </button>
+            </div>
           )}
         </div>
       </div>
