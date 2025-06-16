@@ -6,6 +6,7 @@ import moment from "moment-jalaali";
 import "moment/locale/fa";
 
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import GlobalMessageProvider from "@/components/Providers/GlobalMessageProvider";
 
 moment.locale("fa");
 moment.loadPersian({ dialect: "persian-modern" });
@@ -24,7 +25,10 @@ export default function RootLayout({
     <html lang="fa" dir="rtl">
       <body className="antialiased">
         <ApolloWrapper>
-          <AntdRegistry>{children}</AntdRegistry>
+          <AntdRegistry>
+            <GlobalMessageProvider />
+            {children}
+          </AntdRegistry>
         </ApolloWrapper>
       </body>
     </html>

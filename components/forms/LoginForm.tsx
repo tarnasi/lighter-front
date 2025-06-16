@@ -7,6 +7,7 @@ import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION } from "@/apollo/mutations";
 import Cookies from "js-cookie";
 import { useUserStore } from "@/stores/userStore";
+import { useMessageStore } from "@/stores/messageStore";
 
 const LoginForm = () => {
   const [mobile, setMobile] = useState("");
@@ -14,6 +15,8 @@ const LoginForm = () => {
   const [errors, setErrors] = useState<{ mobile?: string; password?: string }>(
     {}
   );
+
+  const { showMessage } = useMessageStore();
 
   const setUser = useUserStore((state) => state.setUser)
 
@@ -35,7 +38,13 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    showMessage({ type: 'loading', content: 'بررسی اطلاعات' });
+    if (!validate()) {
+      setTimeout(() => {
+        showMessage({ type: 'error', content: 'خطا در پردازش اطلاعات' })
+      }, 1000);
+      return
+    };
 
     try {
       const res = await login({ variables: { mobile, password } });
@@ -53,12 +62,18 @@ const LoginForm = () => {
           sameSite: "Lax",
         });
         setUser(user)
-        window.location.href = "/panel";
+
+        showMessage({ type: 'success', content: 'در حال ورود به صفحه داشبورد' });
+
+        setTimeout(() => {
+          window.location.href = user.role == "admin" ? "/panel" : '/dashboard';
+        }, 1000)
       } else {
         setErrors({ password: "توکن دریافتی نامعتبر بود." });
       }
     } catch (err: any) {
       console.error("Login error:", err);
+      showMessage({ type: 'error', content: 'خطا در پردازش' });
       if (err?.graphQLErrors?.length) {
         setErrors({ password: err.graphQLErrors[0].message });
       } else {

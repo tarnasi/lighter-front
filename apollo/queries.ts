@@ -69,20 +69,18 @@ export const CATEGORY_BY_ID_QUERY = gql`
 `;
 
 export const BRAND_LIST_QUERY = gql`
-  query BrandByCategorySlug(
-    $catSlug: String
+  query BrandList(
+    $search: String
+    $sort: SortBrandInput
     $pagination: BrandPaginationInput
   ) {
-    brandByCategorySlug(catSlug: $catSlug, pagination: $pagination) {
+    brandList(search: $search, sort: $sort, pagination: $pagination) {
       items {
         id
         name
         slug
         description
         image
-        category {
-          slug
-        }
       }
       total
       page

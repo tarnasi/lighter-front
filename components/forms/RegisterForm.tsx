@@ -7,9 +7,11 @@ import { REGISTER_MUTATION } from "@/apollo/mutations";
 import JalaliCalendarDate from "./inputs/JalaliCalendarDate";
 import Link from "next/link";
 import Image from "next/image";
+import { useMessageStore } from '@/stores/messageStore';
 
 const RegisterForm = () => {
   const router = useRouter();
+  const { showMessage } = useMessageStore();
 
   const [form, setForm] = useState({
     full_name: "",
@@ -48,9 +50,13 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    showMessage({ type: 'loading', content: 'در حال ثبت اطلاعات' });
     setApiError("");
     const errors = validate();
     if (Object.keys(errors).length > 0) {
+      setTimeout(() => {
+        showMessage({ type: 'error', content: 'خطا در پردازش' });
+      }, 1000);
       setFormErrors(errors);
       return;
     }
@@ -69,9 +75,15 @@ const RegisterForm = () => {
 
       if (data?.register?.token) {
         localStorage.setItem("token", data.register.token);
-        router.push("/panel");
+
+        setTimeout(() => {
+          showMessage({ type: 'success', content: 'ثبت نام با موفقیت انجام شد' });
+        }, 1000)
+
+        router.push("/dashboard");
       }
     } catch (err: any) {
+      showMessage({ type: 'error', content: 'خطا در پردازش' });
       setApiError(err.message || "خطایی رخ داده است");
     }
   };
