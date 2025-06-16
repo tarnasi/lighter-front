@@ -18,8 +18,10 @@ export function middleware(request: NextRequest) {
 
   // 🚫 Not logged in at all
   if (!token || !user) {
-    // Allow access to /login if not authenticated
-    if (pathname === "/login") return NextResponse.next();
+    const publicRoutes = ["/dashboard/orders"];
+    if (pathname === "/login" || publicRoutes.includes(pathname)) {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
