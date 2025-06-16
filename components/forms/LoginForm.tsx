@@ -18,7 +18,7 @@ const LoginForm = () => {
 
   const { showMessage } = useMessageStore();
 
-  const setUser = useUserStore((state) => state.setUser)
+  const setUser = useUserStore((state) => state.setUser);
 
   const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
 
@@ -38,13 +38,17 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    showMessage({ type: 'loading', content: 'بررسی اطلاعات' });
+    showMessage({ key: "login", type: "loading", content: "بررسی اطلاعات" });
     if (!validate()) {
       setTimeout(() => {
-        showMessage({ type: 'error', content: 'خطا در پردازش اطلاعات' })
+        showMessage({
+          key: "login",
+          type: "error",
+          content: "خطا در پردازش اطلاعات",
+        });
       }, 1000);
-      return
-    };
+      return;
+    }
 
     try {
       const res = await login({ variables: { mobile, password } });
@@ -61,19 +65,22 @@ const LoginForm = () => {
           expires: 7,
           sameSite: "Lax",
         });
-        setUser(user)
+        setUser(user);
 
-        showMessage({ type: 'success', content: 'در حال ورود به صفحه داشبورد' });
+        showMessage({
+          key: "login",
+          type: "success",
+          content: "در حال ورود به صفحه داشبورد",
+        });
 
         setTimeout(() => {
-          window.location.href = user.role == "admin" ? "/panel" : '/dashboard';
-        }, 1000)
+          window.location.href = user.role == "admin" ? "/panel" : "/dashboard";
+        }, 1000);
       } else {
         setErrors({ password: "توکن دریافتی نامعتبر بود." });
       }
     } catch (err: any) {
-      console.error("Login error:", err);
-      showMessage({ type: 'error', content: 'خطا در پردازش' });
+      showMessage({ key: "login", type: "error", content: "خطا در پردازش" });
       if (err?.graphQLErrors?.length) {
         setErrors({ password: err.graphQLErrors[0].message });
       } else {

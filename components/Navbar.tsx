@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import { useUserStore } from "@/stores/userStore";
-import { useLazyQuery } from "@apollo/client";
-
-import { ME_QUERY } from "@/apollo/queries";
+import { useUserMeLazy } from "@/hooks/useUser";
+import { useMessageStore } from "@/stores/messageStore";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 const logo_name = "فروشگاه";
 
@@ -20,9 +20,9 @@ export default function Navbar({ isUserPanel = false }: props) {
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
 
-  const [getMe, { called, data, loading }] = useLazyQuery(ME_QUERY, {
-    fetchPolicy: "network-only",
-  });
+  const {showMessage} = useMessageStore();
+
+  const { getMe, called, userData, loading } = useUserMeLazy();
 
   useEffect(() => {
     const token = Cookies.get("accessToken");
@@ -35,16 +35,25 @@ export default function Navbar({ isUserPanel = false }: props) {
   }, []);
 
   useEffect(() => {
-    if (data?.me) {
-      setUser(data.me);
+    if (userData?.me) {
+      setUser(userData.me);
     }
-  }, [data, setUser]);
+  }, [userData, setUser]);
+
+  if (loading) <LoadingSkeleton />;
 
   const handleLogout = () => {
-    Cookies.remove("accessToken");
-    Cookies.remove("me");
-    setIsLoggedIn(false);
-    window.location.href = "/";
+    showMessage({
+      key: "loading",
+      type: "info",
+      content: "در حال حروج از داشبورد",
+    });
+    setTimeout(() => {
+      Cookies.remove("accessToken");
+      Cookies.remove("me");
+      setIsLoggedIn(false);
+      window.location.href = "/";
+    }, 500);
   };
 
   return (

@@ -1,18 +1,18 @@
-import Navbar from '@/components/Navbar'
-import PageTitle from '@/components/PageTitle'
-import UserTable from '@/components/panel/tables/UserTables'
-import React from 'react'
+import Navbar from "@/components/Navbar";
+import PageTitle from "@/components/PageTitle";
+import UserTable from "@/components/panel/tables/UserTables";
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const UsersPage = async (props: Props) => {
   return (
-    <div className='bg-white min-h-screen'>
+    <div className="bg-white min-h-screen">
       <Navbar />
-      <PageTitle title='لیست کاربران' returnLink='/panel' returnTitle='برگشت' />
+      <PageTitle title="لیست کاربران" returnLink="/panel" returnTitle="برگشت" />
       <UserTable />
     </div>
-  )
-}
+  );
+};
 
 export default UsersPage;

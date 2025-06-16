@@ -7,7 +7,7 @@ import { REGISTER_MUTATION } from "@/apollo/mutations";
 import JalaliCalendarDate from "./inputs/JalaliCalendarDate";
 import Link from "next/link";
 import Image from "next/image";
-import { useMessageStore } from '@/stores/messageStore';
+import { useMessageStore } from "@/stores/messageStore";
 
 const RegisterForm = () => {
   const router = useRouter();
@@ -50,15 +50,19 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    showMessage({ type: 'loading', content: 'در حال ثبت اطلاعات' });
+    showMessage({
+      key: "register",
+      type: "loading",
+      content: "در حال ثبت اطلاعات",
+    });
     setApiError("");
     const errors = validate();
     if (Object.keys(errors).length > 0) {
+      showMessage({ key: "register", type: "error", content: "خطا در پردازش" });
       setTimeout(() => {
-        showMessage({ type: 'error', content: 'خطا در پردازش' });
+        setFormErrors(errors);
+        return;
       }, 1000);
-      setFormErrors(errors);
-      return;
     }
 
     try {
@@ -75,15 +79,17 @@ const RegisterForm = () => {
 
       if (data?.register?.token) {
         localStorage.setItem("token", data.register.token);
-
+        showMessage({
+          key: "register",
+          type: "success",
+          content: "ثبت نام با موفقیت انجام شد",
+        });
         setTimeout(() => {
-          showMessage({ type: 'success', content: 'ثبت نام با موفقیت انجام شد' });
-        }, 1000)
-
-        router.push("/dashboard");
+          router.push("/dashboard");
+        }, 1000);
       }
     } catch (err: any) {
-      showMessage({ type: 'error', content: 'خطا در پردازش' });
+      showMessage({ type: "error", content: "خطا در پردازش" });
       setApiError(err.message || "خطایی رخ داده است");
     }
   };

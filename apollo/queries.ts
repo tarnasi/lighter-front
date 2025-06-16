@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const ME_QUERY = gql`
+export const USER_ME_QUERY = gql`
   query Me {
     me {
       id
@@ -21,6 +21,20 @@ export const USER_LIST_QUERY = gql`
       full_name
       mobile
       email
+      role
+      birthday
+      wholesaler
+    }
+  }
+`;
+
+export const USER_UPDATE_PROFILE = gql`
+  mutation UpdateProfile($input: UpdateUserProfileInput!) {
+    updateProfile(input: $input) {
+      id
+      full_name
+      email
+      mobile
       role
       birthday
       wholesaler

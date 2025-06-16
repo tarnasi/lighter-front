@@ -6,7 +6,7 @@ import moment from "moment-jalaali";
 import "moment/locale/fa";
 
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import GlobalMessageProvider from "@/components/Providers/GlobalMessageProvider";
+import GlobalMessageProvider from "@/Providers/GlobalMessageProvider";
 
 moment.locale("fa");
 moment.loadPersian({ dialect: "persian-modern" });
