@@ -1,12 +1,14 @@
 "use client";
 
 import { useOrderStore } from "@/stores/useOrderStore";
-import { Button, Card, Empty, Divider, Tooltip } from "antd";
+import { Button, Card, Empty, Divider, Tooltip, message } from "antd";
 import { DeleteOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function OrdersPage() {
   const { items, clearOrder, decreaseQty, increaseQty, removeFromOrder } = useOrderStore();
+  const [loading, setLoading] = useState(false);
 
   const getDiscountedPrice = (item: any) => {
     return item.discount && item.discount > 0
@@ -19,8 +21,24 @@ export default function OrdersPage() {
     0
   );
 
+  const handlePlaceOrder = async () => {
+    if (items.length === 0) {
+      message.warning("سفارشی برای ثبت وجود ندارد.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await new Promise((res) => setTimeout(res, 1500)); // شبیه‌سازی
+      message.success("سفارش شما با موفقیت ثبت شد!");
+      clearOrder();
+    } catch (error) {
+      message.error("خطا در ثبت سفارش، لطفا دوباره تلاش کنید.");
+    }
+    setLoading(false);
+  };
+
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div className="p-4 max-w-3xl mx-auto mb-12">
       <h2 className="text-2xl font-extrabold text-gray-900 mb-6">سفارش‌های شما</h2>
 
       {items.length === 0 ? (
@@ -33,9 +51,9 @@ export default function OrdersPage() {
                 key={item.id}
                 className="shadow-md rounded-lg p-4 hover:shadow-lg transition-shadow"
               >
-                <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-                  {/* تصویر محصول سمت راست در موبایل */}
-                  <div className="w-28 h-28 relative flex-shrink-0 border rounded-lg overflow-hidden bg-white">
+                <div className="flex flex-row-reverse items-center gap-4">
+                  {/* تصویر محصول همیشه سمت راست */}
+                  <div className="w-24 h-24 relative flex-shrink-0 border rounded-lg overflow-hidden bg-white">
                     {item.images?.[0] ? (
                       <Image
                         src={item.images[0]}
@@ -50,39 +68,37 @@ export default function OrdersPage() {
                     )}
                   </div>
 
-                  {/* اطلاعات محصول */}
-                  <div className="flex-1 text-right sm:text-left flex flex-col justify-between h-full">
-                    <div>
-                      <h3 className="font-bold text-lg text-gray-800">{item.title}</h3>
+                  {/* اطلاعات محصول سمت چپ */}
+                  <div className="flex-1 text-right sm:text-left">
+                    <h3 className="font-bold text-lg text-gray-800">{item.title}</h3>
 
-                      <div className="mt-1 text-sm text-gray-600">
-                        قیمت واحد:
-                        {item.discount > 0 ? (
-                          <>
-                            <span className="line-through mr-2 text-gray-400">
-                              {item.price.toLocaleString()} تومان
-                            </span>
-                            <span className="text-red-600 font-semibold">
-                              {getDiscountedPrice(item).toLocaleString()} تومان
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-gray-700 ml-1">
+                    <div className="mt-1 text-sm text-gray-600">
+                      قیمت واحد:
+                      {item.discount > 0 ? (
+                        <>
+                          <span className="line-through mr-2 text-gray-400">
                             {item.price.toLocaleString()} تومان
                           </span>
-                        )}
-                      </div>
-
-                      <div className="mt-1 text-sm text-gray-700">
-                        جمع:
-                        <span className="font-semibold text-green-700 mr-1">
-                          {(getDiscountedPrice(item) * item.quantity).toLocaleString()} تومان
+                          <span className="text-red-600 font-semibold">
+                            {getDiscountedPrice(item).toLocaleString()} تومان
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-gray-700 ml-1">
+                          {item.price.toLocaleString()} تومان
                         </span>
-                      </div>
+                      )}
+                    </div>
+
+                    <div className="mt-1 text-sm text-gray-700">
+                      جمع:
+                      <span className="font-semibold text-green-700 mr-1">
+                        {(getDiscountedPrice(item) * item.quantity).toLocaleString()} تومان
+                      </span>
                     </div>
 
                     {/* کنترل تعداد و حذف */}
-                    <div className="mt-4 flex items-center gap-3">
+                    <div className="mt-3 flex items-center gap-3 justify-end sm:justify-start">
                       <Tooltip title="کم کردن تعداد">
                         <Button
                           type="default"
@@ -127,18 +143,18 @@ export default function OrdersPage() {
           <Divider className="my-8" />
 
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-2xl font-extrabold text-green-700">
+            <div className="text-base sm:text-lg font-extrabold text-green-700">
               مجموع کل: {totalPrice.toLocaleString()} تومان
             </div>
 
             <Button
-              onClick={clearOrder}
-              danger
-              icon={<DeleteOutlined />}
-              className="font-semibold"
+              type="primary"
               size="large"
+              loading={loading}
+              onClick={handlePlaceOrder}
+              className="font-semibold rounded-md shadow-lg"
             >
-              پاک کردن کل سفارش
+              ثبت نهایی سفارش و پرداخت
             </Button>
           </div>
         </>
