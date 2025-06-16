@@ -7,7 +7,6 @@ type Props = {};
 export default async function page({}: Props) {
   return (
     <>
-      <Navbar />
       <PageTitle title="ایجاد محصول جدید" returnLink="/panel/products" />
       <div className="flex justify-center mb-16">
         <ProductForm />

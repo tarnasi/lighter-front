@@ -5,7 +5,6 @@ import PageTitle from "@/components/PageTitle";
 const CreateCategoryPage = async () => {
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
       <PageTitle
         title="ساخت دسته بندی جدید"
         returnLink="/panel/categories"

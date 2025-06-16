@@ -7,7 +7,6 @@ type Props = {};
 export default async function page({}: Props) {
   return (
     <>
-      <Navbar />
       <PageTitle title="محصولات" returnLink="/panel" />
       <ProductTable />
     </>

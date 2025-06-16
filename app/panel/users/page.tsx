@@ -8,7 +8,6 @@ type Props = {};
 const UsersPage = async (props: Props) => {
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
       <PageTitle title="لیست کاربران" returnLink="/panel" returnTitle="برگشت" />
       <UserTable />
     </div>

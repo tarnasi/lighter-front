@@ -24,7 +24,7 @@ const UserTable = () => {
   if (error) return <p className="text-red-500">{error.message}</p>;
 
   return (
-    <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
+    <div>
       <div className="hidden md:block overflow-x-auto py-8">
         <Link
           href="/panel/users/create"

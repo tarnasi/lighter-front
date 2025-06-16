@@ -13,7 +13,6 @@ type Props = {};
 const PanelPage = async (props: Props) => {
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
       <PageTitle title="پنل مدیریت" returnLink="/" returnTitle="رفتن به سایت" />
       <InfoCards />
       <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 my-8">

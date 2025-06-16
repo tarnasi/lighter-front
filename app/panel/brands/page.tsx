@@ -8,7 +8,6 @@ type Props = {}
 async function BarndPage({}: Props) {
   return (
     <div className='bg-white min-h-screen'>
-      <Navbar />
       <PageTitle title='برندها' returnLink='/panel' returnTitle='برگشت' />
       <BrandTable />
     </div>

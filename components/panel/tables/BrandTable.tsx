@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useBrandList } from "@/hooks/useBrand";
 import { BRAND_DELETE_MUTATION } from "@/apollo/mutations";
@@ -14,28 +14,23 @@ import EmptyBox from "@/components/EmptyBox";
 import { FaTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 
+import { Pagination } from "antd";
+
 const BrandTable = () => {
-  const {
-    brands,
-    loading,
-    error,
-    refetch,
-  } = useBrandList({
-    search: "",
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
+  const { brands, total, loading, error, refetch } = useBrandList({
+    pagination: { page: currentPage, pageSize },
     sort: { field: "name", order: "ASC" },
-    pagination: {
-      page: 1,
-      pageSize: 20,
-    }
+    search: "",
   });
 
-  const [deleteBrand] = useMutation(BRAND_DELETE_MUTATION, {
-    refetchQueries: ["BrandList"],
-  });
+  const [deleteBrand] = useMutation(BRAND_DELETE_MUTATION);
 
   useEffect(() => {
-    refetch();
-  }, []);
+    refetch({ pagination: { page: currentPage, pageSize } });
+  }, [currentPage]);
 
   const handleDeleteBrand = async (id: string) => {
     try {
@@ -51,9 +46,20 @@ const BrandTable = () => {
   if (brands.length === 0) return <EmptyBox />;
 
   return (
-    <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800">
+    <div>
+      {/* Top Pagination */}
+      <div className="py-4 flex justify-center">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger={false}
+          onChange={(page) => setCurrentPage(page)}
+        />
+      </div>
+
       {/* DESKTOP */}
-      <div className="hidden md:block overflow-x-auto py-8">
+      <div className="hidden md:block overflow-x-auto py-4">
         <Link
           href="/panel/brands/create"
           className="border bg-white w-full rounded p-1 text-sm hover:bg-gray-200 text-center"
@@ -78,7 +84,9 @@ const BrandTable = () => {
                 <td className="p-2 border">{brand.name}</td>
                 <td className="p-2 border">{brand.slug}</td>
                 <td className="p-2 border">
-                  {brand.description || <span className="text-gray-500">ثبت نشده</span>}
+                  {brand.description || (
+                    <span className="text-gray-500">ثبت نشده</span>
+                  )}
                 </td>
                 <td className="p-2 border flex items-center justify-center">
                   {brand.image ? (
@@ -133,7 +141,7 @@ const BrandTable = () => {
                   <strong>نام:</strong> {brand.name}
                 </p>
                 <p>
-                  <strong>نام انگلیسی (SEO):</strong> {brand.slug}
+                  <strong>نام انگلیسی:</strong> {brand.slug}
                 </p>
                 <p>
                   <strong>توضیحات:</strong> {brand.description || "-"}
@@ -157,20 +165,30 @@ const BrandTable = () => {
             <div className="flex items-center justify-evenly mt-4 border-t-2 pt-6 pb-4">
               <Link
                 href={`/panel/brands/update/${brand.id}`}
-                className="flex items-center justify-evenly gap-2 shadow px-8 p-2 text-blue-400 hover:text-blue-900 hover:cursor-pointer"
+                className="flex items-center justify-evenly gap-2 shadow px-8 p-2 text-blue-400 hover:text-blue-900"
               >
                 <FaEdit /> ویرایش
               </Link>
               <button
                 onClick={() => handleDeleteBrand(brand.id)}
-                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2 hover:cursor-pointer"
+                className="shadow px-8 p-2 text-red-500 hover:text-red-800 flex items-center justify-evenly gap-2"
               >
-                <FaTrashCan />
-                حذف
+                <FaTrashCan /> حذف
               </button>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Bottom Pagination */}
+      <div className="py-4 mb-[14px] flex justify-center">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger={false}
+          onChange={(page) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );

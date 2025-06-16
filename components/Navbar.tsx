@@ -20,7 +20,7 @@ export default function Navbar({ isUserPanel = false }: props) {
   const setUser = useUserStore((state) => state.setUser);
   const user = useUserStore((state) => state.user);
 
-  const {showMessage} = useMessageStore();
+  const { showMessage } = useMessageStore();
 
   const { getMe, called, userData, loading } = useUserMeLazy();
 
@@ -57,7 +57,7 @@ export default function Navbar({ isUserPanel = false }: props) {
   };
 
   return (
-    <nav className="px-4 md:px-16 lg:px-32 xl:px-64 bg-white text-gray-800 border-b border-gray-200">
+    <nav className="text-gray-800">
       <div className="flex items-center justify-between h-14">
         <Link href="/" className="flex justify-center items-center gap-2">
           <Image src="/logo/logo-3.png" alt="logo" width={48} height={48} />

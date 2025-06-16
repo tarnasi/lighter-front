@@ -8,7 +8,6 @@ type Props = {}
 const CategoryPage = async (props: Props) => {
   return (
     <div className='bg-white min-h-screen'>
-      <Navbar />
       <PageTitle title='دسته بندی' returnLink='/panel' returnTitle='برگشت' />
       <CategoryTable />
     </div>

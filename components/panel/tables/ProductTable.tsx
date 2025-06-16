@@ -1,19 +1,24 @@
 "use client";
 
 import { PRODUCT_DELETE_MUTATION } from "@/apollo/mutations";
-import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useMutation } from "@apollo/client";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
-import { Select, Button } from "antd";
+import { Select, Button, Pagination } from "antd";
 import { useCategoryList } from "@/hooks/useCategory";
 import { useBrandList } from "@/hooks/useBrand";
 import { useProductList } from "@/hooks/useProduct";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function ProductTable() {
+  const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [brandId, setBrandId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 9;
+
   const { categories: categoryData } = useCategoryList({
     pagination: { page: 1, pageSize: 1000 },
   });
@@ -22,17 +27,18 @@ export default function ProductTable() {
     pagination: { page: 1, pageSize: 1000 },
   });
 
-  const [categoryId, setCategoryId] = useState<string | null>(null);
-  const [brandId, setBrandId] = useState<string | null>(null);
-
   const {
     products: productData,
     loading: productLoading,
     error: productError,
+    total,
+    page,
+    pageSize: usedPageSize,
     refetch: productRefetch,
   } = useProductList({
     categoryId,
     brandId,
+    pagination: { page: currentPage, pageSize },
   });
 
   const [deleteProduct] = useMutation(PRODUCT_DELETE_MUTATION);
@@ -53,14 +59,18 @@ export default function ProductTable() {
   };
 
   useEffect(() => {
-    productRefetch({ categoryId, brandId });
-  }, [categoryId, brandId]);
+    productRefetch({
+      categoryId,
+      brandId,
+      pagination: { page: currentPage, pageSize },
+    });
+  }, [categoryId, brandId, currentPage]);
 
   if (productLoading) return <LoadingSkeleton />;
   if (productError) return <p>{productError.message}</p>;
 
   return (
-    <div className="px-4 md:px-16 lg:px-32 xl:px-64 text-gray-800">
+    <div>
       {/* Filter Section */}
       <div className="flex flex-col justify-center sm:flex-row gap-4 my-4 items-center shadow border py-6 px-3 rounded border-gray-300">
         <Select
@@ -96,7 +106,20 @@ export default function ProductTable() {
         <Button onClick={clearFilters}>پاک‌سازی</Button>
       </div>
 
-      {/* Create New Product Link */}
+      {/* Pagination Top */}
+      {total > 0 && (
+        <div className="flex justify-center py-2">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={total}
+            showSizeChanger={false}
+            onChange={(page) => setCurrentPage(page)}
+          />
+        </div>
+      )}
+
+      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         <Link
           href="/panel/products/create"
@@ -105,7 +128,6 @@ export default function ProductTable() {
           ایجاد محصول جدید
         </Link>
 
-        {/* Product Cards */}
         {productData?.map((product: any) => {
           const hasDiscount = product.discount > 0;
           const discountedPrice = hasDiscount
@@ -117,13 +139,11 @@ export default function ProductTable() {
               key={product.id}
               className="bg-white rounded-xl border shadow-sm overflow-hidden flex flex-col"
             >
-              {/* Header with Category and Brand */}
               <div className="bg-gray-100 text-xs px-4 py-2 text-gray-700 flex justify-between">
                 <span>دسته: {product.category.name}</span>
                 <span>برند: {product.brand.name}</span>
               </div>
 
-              {/* Product Image */}
               <div className="relative w-full h-48 bg-gray-50">
                 {product.is_pack && (
                   <div className="absolute top-2 right-2 bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow z-10">
@@ -144,13 +164,11 @@ export default function ProductTable() {
                 )}
               </div>
 
-              {/* Product Info */}
               <div className="flex-1 p-4 text-sm flex flex-col justify-between gap-2">
                 <h3 className="font-bold text-base text-gray-800">
                   {product.title}
                 </h3>
 
-                {/* Price */}
                 <div className="text-sm">
                   {hasDiscount ? (
                     <div className="flex items-center gap-2">
@@ -171,7 +189,6 @@ export default function ProductTable() {
                   )}
                 </div>
 
-                {/* Stock */}
                 <div className="text-xs text-gray-600">
                   {Number(product.quantity) > 0 ? (
                     `موجودی: ${product.quantity}`
@@ -183,7 +200,6 @@ export default function ProductTable() {
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex border-t divide-x text-sm">
                 <Link
                   href={`/panel/products/update/${product.id}`}
@@ -204,6 +220,19 @@ export default function ProductTable() {
           );
         })}
       </div>
+
+      {/* Pagination Bottom */}
+      {total > 0 && (
+        <div className="py-4 mb-[14px] flex justify-center">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={total}
+            showSizeChanger={false}
+            onChange={(page) => setCurrentPage(page)}
+          />
+        </div>
+      )}
     </div>
   );
 }

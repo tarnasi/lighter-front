@@ -10,7 +10,6 @@ function BarndPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
       <PageTitle
         title="ویرایش برند"
         returnLink="/panel/brands"

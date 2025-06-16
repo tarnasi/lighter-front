@@ -10,7 +10,7 @@ type Props = {
 
 const PageTitle = ({ title, returnLink, returnTitle }: Props) => {
   return (
-    <div className="px-4 md:px-16 lg:px-32 xl:px-64 bg-gray-200 text-gray-800">
+    <div className="bg-gray-200 text-gray-800">
       <div className="flex items-center justify-between px-4 py-2">
         {returnLink && (
           <Link href={returnLink}>

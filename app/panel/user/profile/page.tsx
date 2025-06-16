@@ -8,7 +8,6 @@ type Props = {};
 const UserProfilePage = async (props: Props) => {
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
       <PageTitle title="پروفایل" returnLink="/panel" returnTitle="برگشت" />
       <UserProfileForm />
     </div>

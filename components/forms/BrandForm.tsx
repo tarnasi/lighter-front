@@ -127,7 +127,7 @@ function BrandForm({ brandId }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`h-full w-full md:w-2/3 lg:w-2/4 xl:w-2/6 mt-8 p-4 rounded shadow-xl transition-opacity ${
+      className={`h-full w-full md:w-2/3 lg:w-3/4 mt-8 p-4 rounded shadow-xl transition-opacity ${
         loading ? "opacity-60 pointer-events-none" : ""
       }`}
     >

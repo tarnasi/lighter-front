@@ -6,23 +6,21 @@ import { useUserMe, useUserUpdateProfile } from "@/hooks/useUser";
 import JalaliCalendarDate from "@/components/forms/inputs/JalaliCalendarDate";
 import DateObject from "react-date-object";
 import LoadingSkeleton from "../LoadingSkeleton";
+import moment from "moment";
 
 const UserProfileForm: React.FC = () => {
   const [form] = Form.useForm();
   const { userData, loading, error } = useUserMe();
   const { updateProfile, updateLoading } = useUserUpdateProfile();
-  const [userBirthday, setUserBirthday] = useState<DateObject | null>();
 
   useEffect(() => {
     if (userData?.me) {
-      const user_birthday = new DateObject(userData.me?.birthday)
-      console.log(user_birthday);
-      setUserBirthday(user_birthday)
+      const user_birthday = new DateObject(userData.me?.birthday);
       form.setFieldsValue({
         full_name: userData.me.full_name,
         email: userData.me.email,
         mobile: userData.me.mobile,
-        birthday: user_birthday,
+        birthday: moment(Number(userData.me.birthday)),
       });
     }
   }, [userData, form]);
@@ -92,7 +90,11 @@ const UserProfileForm: React.FC = () => {
           <Form.Item name="birthday" label="تاریخ تولد">
             <JalaliCalendarDate
               value={form.getFieldValue("birthday")}
-              onChange={(val: any) => form.setFieldsValue({ birthday: new DateObject(val) })}
+              onChange={(val: any) =>
+                form.setFieldsValue({
+                  birthday: moment(Number(val)),
+                })
+              }
             />
           </Form.Item>
 

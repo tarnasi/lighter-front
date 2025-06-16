@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import CategoryUpdateForm from "@/components/forms/CategoryInputsForm";
 import Navbar from "@/components/Navbar";
@@ -10,7 +10,6 @@ const CreateCategoryPage = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
       <PageTitle
         title="ویرایش دسته بندی"
         returnLink="/panel/categories"

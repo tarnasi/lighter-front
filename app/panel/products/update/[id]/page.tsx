@@ -10,7 +10,6 @@ export default async function page() {
 
   return (
     <>
-      <Navbar />
       <PageTitle title="ویرایش محصول" returnLink="/panel/products" />
       <div className="flex justify-center mb-16">
         <ProductForm productId={params.id} />
