@@ -8,6 +8,7 @@ import { LOGIN_MUTATION } from "@/apollo/mutations";
 import Cookies from "js-cookie";
 import { useUserStore } from "@/stores/userStore";
 import { useMessageStore } from "@/stores/messageStore";
+import { BsSignpostSplit } from "react-icons/bs";
 
 const LoginForm = () => {
   const [mobile, setMobile] = useState("");
@@ -92,7 +93,7 @@ const LoginForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`h-full w-full md:w-1/2 lg:w-1/3 mt-8 p-4 rounded shadow-xl transition-opacity ${
+      className={`h-full sm:w-3/4 md:w-2/3 lg:w-2/4 mt-8 p-4 rounded border border-gray-300 shadow-md ${
         loading ? "opacity-60 pointer-events-none" : ""
       }`}
     >
@@ -189,21 +190,29 @@ const LoginForm = () => {
           )}
         </button>
 
+        <div className="flex items-center justify-center gap-4 mt-4 border-b border-gray-200 pb-6">
+          <span className="text-center text-sm">
+            ثبت نام از طریق لینک روبرو{" "}
+            <Link
+              className="text-sky-600 underline underline-offset-6"
+              href="/register"
+            >
+              اینجا
+            </Link>
+          </span>
+          <BsSignpostSplit />
+          <span className="text-center text-sm">
+            <Link
+              className="text-sky-600 underline underline-offset-6"
+              href="/reset-password"
+            >
+              فراموشی رمز عبور
+            </Link>
+          </span>
+        </div>
         <p className="text-center mt-4 text-sm">
-          <Link
-            className="text-sky-600 underline underline-offset-6"
-            href="/reset-password"
-          >
-            فراموشی رمز عبور
-          </Link>
-        </p>
-        <p className="text-center mt-4 text-sm">
-          ثبت نام از طریق لینک روبرو{" "}
-          <Link
-            className="text-sky-600 underline underline-offset-6"
-            href="/register"
-          >
-            اینجا
+          <Link className="text-sky-600 underline underline-offset-6" href="/">
+            برگرد به صفحه اصلی
           </Link>
         </p>
       </div>
