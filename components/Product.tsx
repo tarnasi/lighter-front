@@ -55,7 +55,7 @@ export default function Product({ product }: Props) {
       <div className="bg-gray-100 text-xs px-4 py-1 text-gray-700 flex justify-start gap-1 items-center">
         <Link
           className="hover:underline hover:underline-offset-4 hover:font-bold"
-          href={`/categories/${product.category.slug}`}
+          href={`/category/${product.category.slug}`}
         >
           {product.category.name}
         </Link>
@@ -64,7 +64,7 @@ export default function Product({ product }: Props) {
         </span>
         <Link
           className="hover:underline hover:underline-offset-4 hover:font-bold"
-          href={`/categories/${product.category.slug}/${product.brand.slug}`}
+          href={`/category/${product.category.slug}/${product.brand.slug}`}
         >
           {product.brand.name}
         </Link>
