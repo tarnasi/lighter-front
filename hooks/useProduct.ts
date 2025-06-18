@@ -1,9 +1,18 @@
 import { useQuery } from "@apollo/client";
+import { Product } from "@/types/product";
 import {
   PRODUCT_LIST_QUERY,
   PRODUCT_LIST_BY_BRAND_QUERY,
   PRODUCT_LIST_BY_CATEGORY_QUERY,
+  PRODUCT_BY_SLUG_QUERY,
 } from "@/apollo/queries";
+
+interface UseProductResult {
+  product: Product | null;
+  loading: boolean;
+  error: any;
+  refetch: () => void;
+}
 
 type SortInput = {
   field: string;
@@ -163,6 +172,24 @@ export function useProductListByCategory(options: ProductListBySlugOptions) {
       (products.length === 0 && !loading
         ? new Error("No products found for this category")
         : null),
+    refetch,
+  };
+}
+
+export function useProductBySlug(slug: string): UseProductResult {
+  const { data, loading, error, refetch } = useQuery(PRODUCT_BY_SLUG_QUERY, {
+    variables: { slug },
+  });
+
+  console.log("PRODUCT BY SLUG: ", data);
+
+  // Extract the first product from the search results
+  const product = data?.productBySlug || null;
+
+  return {
+    product: product,
+    loading,
+    error: error,
     refetch,
   };
 }

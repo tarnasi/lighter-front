@@ -10,7 +10,7 @@ const BrandPage = async () => {
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
-      <Navbar />
+      <Navbar isRoot={true} />
       <PageTitle title={`برندهای ${params.category}`} returnLink="/" />
       <Brands category={params.category} />
     </div>

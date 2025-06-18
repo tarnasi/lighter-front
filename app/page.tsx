@@ -12,7 +12,7 @@ import BrandProductList from "@/components/mainPage/BrandProductList";
 export default async function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar isRoot={true} />
       {/* <Categories /> */}
       {/* Slider Card */}
       {/* Main Product like a big card with 4 card bottom of it like two and two */}

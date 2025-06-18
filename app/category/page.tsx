@@ -6,7 +6,7 @@ import React from "react";
 const CategoryPage = async () => {
   return (
     <div className="bg-white min-h-screen">
-      <Navbar />
+      <Navbar isRoot={true} />
       <CategoryList />
       <AppBottomNavigation />
     </div>

@@ -6,7 +6,6 @@ type Product = {
   id: string;
   title: string;
   price: number;
-  // Add other fields as needed
 };
 
 type OrderItem = Product & {

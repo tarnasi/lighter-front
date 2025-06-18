@@ -4,6 +4,7 @@ import Image from "next/image";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { useOrderStore } from "@/stores/useOrderStore";
 import { useMessageStore } from "@/stores/messageStore";
+import Link from "next/link";
 
 type Props = {
   product: any;
@@ -22,7 +23,8 @@ export default function Product({ product }: Props) {
   const itemInOrder = items.find((item) => item.id === product.id);
 
   return (
-    <div
+    <Link
+      href={`/products/${product.slug}`}
       key={product.id}
       className="bg-white scroll-smooth rounded-xl border shadow-sm hover:cursor-pointer hover:shadow-lg overflow-hidden flex-shrink-0 flex flex-col w-55"
     >
@@ -151,6 +153,6 @@ export default function Product({ product }: Props) {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
