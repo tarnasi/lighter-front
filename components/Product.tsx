@@ -23,13 +23,15 @@ export default function Product({ product }: Props) {
   const itemInOrder = items.find((item) => item.id === product.id);
 
   return (
-    <Link
-      href={`/products/${product.slug}`}
+    <div
       key={product.id}
       className="bg-white scroll-smooth rounded-xl border shadow-sm hover:cursor-pointer hover:shadow-lg overflow-hidden flex-shrink-0 flex flex-col w-55"
     >
       {/* تصویر و نشان is_pack */}
-      <div className="relative w-full h-40 bg-white">
+      <Link
+        href={`/products/${product.slug}`}
+        className="relative w-full h-40 bg-white"
+      >
         {product.is_pack && (
           <div className="absolute top-2 right-2 bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow z-10">
             باکس / عمده
@@ -47,20 +49,32 @@ export default function Product({ product }: Props) {
             بدون تصویر
           </div>
         )}
-      </div>
+      </Link>
 
       {/* دسته بندی و برند */}
       <div className="bg-gray-100 text-xs px-4 py-1 text-gray-700 flex justify-start gap-1 items-center">
-        <span>{product.category.name}</span>
+        <Link
+          className="hover:underline hover:underline-offset-4 hover:font-bold"
+          href={`/categories/${product.category.slug}`}
+        >
+          {product.category.name}
+        </Link>
         <span>
           <BsCaretLeftFill />
         </span>
-        <span>{product.brand.name}</span>
+        <Link
+          className="hover:underline hover:underline-offset-4 hover:font-bold"
+          href={`/categories/${product.category.slug}/${product.brand.slug}`}
+        >
+          {product.brand.name}
+        </Link>
       </div>
 
       {/* بدنه کارت */}
       <div className="flex-1 p-4 flex flex-col justify-between gap-3">
-        <h3 className="font-bold text-base text-gray-800">{product.title}</h3>
+        <Link href={`/products/${product.slug}`}>
+          <h3 className="font-bold text-base text-gray-800">{product.title}</h3>
+        </Link>
 
         {/* قیمت */}
         <div className="text-sm">
@@ -153,6 +167,6 @@ export default function Product({ product }: Props) {
           )}
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
