@@ -59,7 +59,7 @@ export default function BrandProducts({ brandSlug }: Props) {
       {/* Product Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {products.map((product: any) => (
-          <Link href={`/product/${product.slug}`} key={product.id}>
+          <Link href={`/products/${product.slug}`} key={product.id}>
             <div
               className="h-48 w-full rounded-2xl bg-contain bg-no-repeat bg-center shadow-lg
                 flex items-end justify-start text-white

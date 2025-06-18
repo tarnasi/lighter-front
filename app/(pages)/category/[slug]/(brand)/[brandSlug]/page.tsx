@@ -7,15 +7,9 @@ import { useParams } from "next/navigation";
 import React from "react";
 
 const BrandProductListPage = () => {
-  const params = useParams<{ slug: string, brandSlug: string }>();
+  const params = useParams<{ slug: string; brandSlug: string }>();
 
-  return (
-    <div className="bg-white min-h-screen">
-      <Navbar />
-      <BrandProducts brandSlug={params.brandSlug} />
-      <AppBottomNavigation />
-    </div>
-  );
+  return <BrandProducts brandSlug={params.brandSlug} />;
 };
 
 export default BrandProductListPage;
